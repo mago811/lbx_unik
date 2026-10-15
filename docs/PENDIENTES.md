@@ -25,11 +25,12 @@
 
 | # | Qué | Estado |
 |---|---|---|
-| 1 | Crear proyecto en **Vercel** y conectar el repo | ⏳ Pendiente (tú) |
-| 2 | Cuenta de email transaccional (Resend) para formularios | ⏳ |
+| 1 | Crear proyecto en **Vercel** y conectar el repo | ✅ Hecho |
+| 2 | Resend: crear API key y cargar `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` en Vercel | ⏳ Tú |
+| 2b | Resend: verificar el dominio del cliente (registros DNS) para enviar desde `@sudominio` | ⏳ Cuando haya dominio |
 | 3 | GTM + GA4 + Meta Pixel + banner de cookies | ⏳ |
 | 4 | Textos legales (privacidad, cookies, aviso legal) | ⏳ |
-| 5 | `/api/contacto` con antispam | ⏳ |
+| 5 | `/api/contacto` con Resend + honeypot | ✅ Hecho |
 | 6 | Revisar el logo vectorizado (se generó automáticamente desde PNG; idealmente pedir el original al diseñador) | ⚠️ |
 | 7 | Descargar e integrar el resto de proveedores del Drive | En curso |
 | 8 | CMS (Decap) para que el cliente edite el catálogo | Fase 2 |

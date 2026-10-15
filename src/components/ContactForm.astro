@@ -1,6 +1,5 @@
 ---
-// Formulario de consulta / reserva de visita.
-// PREVIEW: no envía. En producción: endpoint en Vercel (/api/contacto) o Formspree.
+// Formulario de consulta / reserva de visita → POST /api/contacto → Resend.
 // Ver docs/SPECS.md §6.
 interface Props { referencia?: string; tipo?: string; titulo?: string }
 const { referencia = '', tipo = 'Visita al showroom', titulo = 'Cuéntanos qué buscas' } = Astro.props;
@@ -25,18 +24,46 @@ const tipos = ['Visita al showroom', 'Sofás', 'Mobiliario', 'Interiorismo', 'Re
   <label class="cf__check"><input type="checkbox" name="privacidad" required /> Acepto la <a href="/legal/privacidad">política de privacidad</a>.</label>
   <input type="text" name="empresa" class="cf__hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
   <button class="btn" type="submit">Enviar consulta</button>
-  <p class="cf__ok" hidden>Gracias. Te contestamos en menos de 24 h laborables. <em>(Preview: este formulario aún no envía)</em></p>
+  <p class="cf__ok" hidden>Gracias, hemos recibido tu consulta. Te contestamos lo antes posible.</p>
+  <p class="cf__err" role="alert" hidden></p>
 </form>
 
 <script>
   document.querySelectorAll<HTMLFormElement>('[data-form="contacto"]').forEach((f) =>
-    f.addEventListener('submit', (e) => {
+    f.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!f.reportValidity()) return;
-      const w = window as any;
-      (w.dataLayer ||= []).push({ event: 'envio_formulario', tipo: (f.elements.namedItem('tipo') as HTMLSelectElement).value });
-      f.querySelector<HTMLElement>('.cf__ok')!.hidden = false;
-      f.querySelector('button')!.setAttribute('disabled', '');
+      const btn = f.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+      const ok = f.querySelector<HTMLElement>('.cf__ok')!;
+      const err = f.querySelector<HTMLElement>('.cf__err')!;
+      const datos: Record<string, unknown> = Object.fromEntries(new FormData(f));
+      datos.privacidad = (f.elements.namedItem('privacidad') as HTMLInputElement).checked;
+      datos.pagina = location.pathname;
+      const q = new URLSearchParams(location.search);
+      datos.utm = ['utm_source', 'utm_medium', 'utm_campaign'].map((k) => q.get(k)).filter(Boolean).join(' / ');
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+      err.hidden = true;
+      try {
+        const res = await fetch('/api/contacto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datos),
+        });
+        const r = await res.json().catch(() => ({}));
+        if (!res.ok || !r.ok) throw new Error(r.error || 'No hemos podido enviar tu consulta.');
+        const w = window as any;
+        (w.dataLayer ||= []).push({ event: 'envio_formulario', tipo: datos.tipo, ubicacion: location.pathname });
+        f.reset();
+        ok.hidden = false;
+        btn.textContent = 'Enviado';
+      } catch (e) {
+        err.textContent = (e as Error).message;
+        err.hidden = false;
+        btn.disabled = false;
+        btn.textContent = 'Enviar consulta';
+      }
     }),
   );
 </script>
@@ -56,5 +83,6 @@ const tipos = ['Visita al showroom', 'Sofás', 'Mobiliario', 'Interiorismo', 'Re
   .cf__check input { width: 18px; height: 18px; }
   .cf__hp { position: absolute; left: -9999px; }
   .cf__ok { color: var(--oliva); margin: 0; }
+  .cf__err { color: #a3352b; margin: 0; }
   .cf .btn { justify-self: start; }
 </style>

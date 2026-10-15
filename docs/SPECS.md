@@ -31,8 +31,8 @@ los empuja a `window.dataLayer`. En producción, Google Tag Manager los envía a
 | Estilos | CSS propio con tokens (`src/styles/global.css`) | Sin framework CSS |
 | Tipografías | `@fontsource/roboto-slab` (800/900) + `@fontsource-variable/outfit` | Auto-alojadas, sin Google Fonts externo (RGPD) |
 | Imágenes | `astro:assets` + sharp → WebP en varios tamaños | Fuente: `content/proveedores/**` (JPG ≤ 2400 px) |
-| Hosting | **Vercel** (pendiente de crear) | Deploy desde la rama `main` de GitHub |
-| Formularios | Fase 1: Vercel Function `/api/contacto` + Resend (email) o Formspree | Ver §6 |
+| Hosting | **Vercel** (equipo LOBOX-Dev, proyecto `lbx-unik`) | Adaptador `@astrojs/vercel`: todo estático salvo `/api/*` |
+| Formularios | Vercel Function `/api/contacto` + Resend | Ver §6 |
 | CMS | Fase 2: **Decap CMS** (git-based) o Sanity | El cliente edita fichas sin tocar código |
 | Analítica | GTM + GA4 + Meta Pixel, tras consentimiento | Banner de cookies obligatorio |
 
@@ -123,14 +123,26 @@ Etiqueta "Imagen de referencia" sobre las imágenes del moodboard (IA). **Obliga
 
 ---
 
-## 6. Formularios (producción)
+## 6. Formularios (Resend) ✅ implementado
 
-1. `POST /api/contacto` (Vercel Function) con validación en servidor.
-2. Antispam: honeypot + Cloudflare Turnstile (o hCaptcha).
-3. Envío por email al cliente (Resend/SMTP) con: tipo, referencia, página de origen y UTM.
-4. Respuesta automática opcional al usuario.
-5. Evento `envio_formulario` solo tras respuesta 200.
-6. Fase 2: subida de fotos/planos (máx. 5 archivos, 10 MB) para reformas/interiorismo.
+Flujo: `ContactForm` → `POST /api/contacto` (función serverless de Vercel, `src/pages/api/contacto.ts`) → API de Resend → email a UNIK.
+
+- Validación en servidor (`src/lib/contacto.ts`): nombre, teléfono (≥ 9 dígitos), email opcional, privacidad obligatoria, longitudes máximas y escape de HTML.
+- Antispam: honeypot `empresa` (al bot se le responde 200 sin enviar nada). Si llega spam, añadir Cloudflare Turnstile.
+- El email incluye tipo, referencia, página de origen, UTM y enlaces directos para llamar, abrir WhatsApp o responder. `reply_to` = email del cliente.
+- Respuestas: `200` ok · `422` error de validación · `503` faltan variables · `502` falla Resend. El formulario muestra el mensaje de error.
+- El evento `envio_formulario` solo se dispara tras un `200`.
+- Sin variables de entorno el formulario muestra «aún no está activo» y no se pierde nada en silencio (queda en los logs de Vercel).
+
+Variables de entorno (Vercel → Settings → Environment Variables), ver `.env.example`:
+
+| Variable | Ejemplo | Notas |
+|---|---|---|
+| `RESEND_API_KEY` | `re_…` | Resend → API Keys (permiso *Sending access*) |
+| `CONTACT_TO` | `hola@uniksofas.es` | Destinatarios, separados por coma |
+| `CONTACT_FROM` | `UNIK Web <web@uniksofas.es>` | Requiere dominio verificado en Resend. Mientras tanto: `UNIK Web <onboarding@resend.dev>` (solo envía al email de la cuenta de Resend) |
+
+Fase 2: subida de fotos/planos (máx. 5 archivos, 10 MB) para reformas e interiorismo.
 
 ---
 
@@ -203,10 +215,10 @@ había una tarifa PVP; se excluyó a propósito).
 | Entorno | Dónde | Estado |
 |---|---|---|
 | Local | `npm run dev` → http://localhost:4321 | ✅ |
-| Preview | Vercel preview por rama / PR | ⏳ Falta crear el proyecto en Vercel |
+| Preview | Vercel (proyecto `lbx-unik`) | ✅ Creado |
 | Producción | Vercel + dominio del cliente | ⏳ Falta dominio |
 
-Variables de entorno previstas (Vercel): `RESEND_API_KEY`, `CONTACT_TO`, `TURNSTILE_SECRET`, `PUBLIC_GTM_ID`.
+Variables de entorno: `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` (ver §6). Futuras: `TURNSTILE_SECRET`, `PUBLIC_GTM_ID`.
 
 ---
 
