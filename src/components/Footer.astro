@@ -1,0 +1,55 @@
+---
+import Logo from './LogoWordmark.svg';
+import { site, waLink } from '../data/site';
+---
+<footer class="ftr section--dark">
+  <div class="wrap ftr__grid">
+    <div>
+      <div class="ftr__logo"><Logo /></div>
+      <p class="ftr__tag">Sofás · Mobiliario · Interiorismo · Reformas</p>
+      <p class="ftr__claim">Diseño que se vive. Espacios que permanecen.</p>
+    </div>
+    <div>
+      <p class="eyebrow">Showroom</p>
+      <p>{site.direccion.calle}<br />{site.direccion.cp} {site.direccion.ciudad}<br />{site.direccion.provincia}</p>
+      <a class="link" href={site.mapsUrl} target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="footer">Cómo llegar</a>
+    </div>
+    <div>
+      <p class="eyebrow">Horario</p>
+      {site.horario.map((h) => <p>{h.dias}<br /><span class="muted">{h.horas}</span></p>)}
+    </div>
+    <div>
+      <p class="eyebrow">Contacto</p>
+      <p>
+        <a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="footer">{site.telefono}</a><br />
+        <a href={waLink('Hola UNIK, me gustaría hacer una consulta.')} target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="footer">WhatsApp</a><br />
+        <a href={`mailto:${site.email}`}>{site.email}</a><br />
+        <a href={site.instagram} target="_blank" rel="noopener">Instagram</a>
+      </p>
+    </div>
+  </div>
+  <div class="wrap ftr__bottom">
+    <span>© {new Date().getFullYear()} {site.razonSocial}</span>
+    <nav aria-label="Legal">
+      <a href="/legal/aviso-legal">Aviso legal</a>
+      <a href="/legal/privacidad">Privacidad</a>
+      <a href="/legal/cookies">Cookies</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .ftr { padding: clamp(64px, 8vw, 104px) 0 32px; }
+  .ftr__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
+  .ftr__logo { color: var(--marfil); }
+  .ftr__logo :global(svg) { height: 48px; width: auto; }
+  .ftr__tag { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; margin: 8px 0 28px; }
+  .ftr__claim { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; max-width: 16ch; line-height: 1.2; }
+  .ftr a { text-decoration: none; }
+  .ftr a:hover { color: var(--piedra); }
+  .muted { color: #a9a39b; }
+  .ftr__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 64px; padding-top: 24px; border-top: 1px solid #2a3846; font-size: 0.8rem; color: #a9a39b; }
+  .ftr__bottom nav { display: flex; gap: 24px; }
+  @media (max-width: 900px) { .ftr__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .ftr__grid { grid-template-columns: 1fr; } .ftr { padding-bottom: 96px; } }
+</style>

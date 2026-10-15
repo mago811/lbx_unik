@@ -1,0 +1,15 @@
+---
+import ColeccionPage from '../components/ColeccionPage.astro';
+import { porColeccion, foto } from '../data/productos';
+---
+<ColeccionPage
+  seoTitle="Muebles de salón en San Sebastián de los Reyes y Alcobendas · UNIK"
+  seoDescription="Composiciones de salón con sofás, butacas, pufs y mesas auxiliares. Showroom en San Sebastián de los Reyes (Madrid)."
+  eyebrow="Salones"
+  titulo="El lugar donde todo se reúne."
+  texto="El salón es un espacio de encuentro y de pausa. Por eso nos gusta pensar en el conjunto: cómo se relacionan el sofá, la mesa, la iluminación y el almacenaje. Descubre soluciones que permiten crear salones equilibrados, funcionales y preparados para el día a día."
+  hero={foto('mauro/mauro-05-isco')}
+  productos={porColeccion('salones')}
+  ctaPrincipal="Ver referencias de salón"
+  tipoConsulta="Mobiliario"
+/>

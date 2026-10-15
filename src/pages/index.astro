@@ -1,0 +1,224 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ProductCard from '../components/ProductCard.astro';
+import ContactForm from '../components/ContactForm.astro';
+import RefBadge from '../components/RefBadge.astro';
+import { destacados, foto } from '../data/productos';
+import { site, marcas, waLink } from '../data/site';
+
+import mbComedor from '../../assets/moodboard/02-comedor-mobiliario.jpg';
+import mbDormitorio from '../../assets/moodboard/03-dormitorio.jpg';
+import mbCocina from '../../assets/moodboard/04-cocina.jpg';
+import mbExterior from '../../assets/moodboard/05-exterior.jpg';
+import mbInteriorismo from '../../assets/moodboard/06-interiorismo-reformas.jpg';
+
+const hero = foto('cotton/cotton-03-dual-arena');
+const colecciones = [
+  { t: 'Sofás', h: '/sofas', img: foto('beatrice/beatrice-01'), ref: false, d: 'Rinconeras, chaise longue, modulares, relax y sofás cama.' },
+  { t: 'Salones', h: '/salones', img: foto('mauro/mauro-03'), ref: false, d: 'Composiciones completas para la zona de estar.' },
+  { t: 'Mobiliario', h: '/mobiliario', img: mbComedor, ref: true, d: 'Mesas, sillas, aparadores y butacas.' },
+  { t: 'Dormitorios', h: '/dormitorios', img: mbDormitorio, ref: true, d: 'Camas, cabeceros y almacenaje.' },
+  { t: 'Cocinas', h: '/cocinas', img: mbCocina, ref: true, d: 'Distribuciones y materiales para el día a día.' },
+  { t: 'Exterior', h: '/exterior', img: mbExterior, ref: true, d: 'Terrazas y jardines como parte de la casa.' },
+];
+const pasos = [
+  ['01', 'Ven al showroom', 'Siéntate, compara modelos y toca los tejidos en San Sebastián de los Reyes.'],
+  ['02', 'Elige medida y acabado', 'Te ayudamos con la composición, el tapizado y el color que encajan con tu salón.'],
+  ['03', 'Lo preparamos', 'Gestionamos el pedido con el fabricante y te mantenemos informado.'],
+  ['04', 'Lo disfrutas en casa', 'Coordinamos la entrega para que solo tengas que estrenarlo.'],
+];
+---
+<Base
+  title="UNIK Sofás y Mobiliario · San Sebastián de los Reyes"
+  description="Showroom de sofás, mobiliario e interiorismo en San Sebastián de los Reyes (Madrid). Descubre nuestras colecciones y ven a verlas en persona."
+>
+  <!-- 1. Hero -->
+  <section class="hero">
+    <Image src={hero} alt="Salón con sofá Cotton de Bobbio en tonos arena" widths={[800, 1400, 2000]} sizes="100vw" class="cover hero__img" loading="eager" fetchpriority="high" />
+    <div class="hero__veil"></div>
+    <div class="wrap hero__txt">
+      <span class="eyebrow">Showroom en San Sebastián de los Reyes</span>
+      <h1>Espacios para vivir.<br />Diseño para sentir.</h1>
+      <p class="hero__lead">Sofás, mobiliario e interiorismo para crear una casa que hable de ti. Ven a probarlos en persona.</p>
+      <div class="btns">
+        <a href="/visitanos" class="btn btn--light" data-track="cta_reserva_visita" data-ubicacion="hero">Reserva tu visita</a>
+        <a href="/sofas" class="btn hero__ghost">Ver colecciones</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Franja de confianza -->
+  <section class="trust">
+    <div class="wrap trust__in">
+      <span class="trust__lbl">Trabajamos con</span>
+      <ul>
+        {marcas.map((m) => <li class:list={{ pend: !m.confirmada }}>{m.nombre}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. Intro -->
+  <section class="section">
+    <div class="wrap intro reveal">
+      <span class="eyebrow">UNIK</span>
+      <h2>El diseño empieza en cada detalle.</h2>
+      <p class="lead">En UNIK creemos que un espacio bien pensado cambia la forma de vivirlo. Seleccionamos mobiliario, sofás y propuestas para cada estancia, combinando estética, comodidad y funcionalidad. Desde una pieza especial hasta la transformación de un ambiente, queremos ayudarte a crear una casa que hable de ti.</p>
+      <a href="/nosotros" class="link">Conócenos</a>
+    </div>
+  </section>
+
+  <!-- 4. Colecciones -->
+  <section class="section section--surface">
+    <div class="wrap">
+      <div class="head reveal">
+        <div>
+          <span class="eyebrow">Colecciones</span>
+          <h2>Cada estancia, su propuesta.</h2>
+        </div>
+        <a href="/sofas" class="btn btn--ghost">Descubrir colecciones</a>
+      </div>
+      <div class="grid grid-3 cols">
+        {colecciones.map((c) => (
+          <a href={c.h} class="col reveal">
+            <div class="col__img">
+              <Image src={c.img} alt={c.t} widths={[480, 800]} sizes="(max-width: 600px) 100vw, 33vw" class="cover" />
+              {c.ref && <RefBadge />}
+            </div>
+            <h3>{c.t}</h3>
+            <p>{c.d}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Sofás destacados -->
+  <section class="section">
+    <div class="wrap">
+      <div class="head reveal">
+        <div>
+          <span class="eyebrow">En el showroom</span>
+          <h2>El sofá alrededor del que sucede todo.</h2>
+        </div>
+        <a href="/sofas" class="btn btn--ghost">Ver todos los sofás</a>
+      </div>
+      <div class="grid grid-3">
+        {destacados.slice(0, 6).map((p) => <ProductCard p={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Cómo trabajamos -->
+  <section class="section section--dark">
+    <div class="wrap">
+      <span class="eyebrow">Cómo trabajamos</span>
+      <h2 class="reveal">De la idea a tu salón, sin complicaciones.</h2>
+      <ol class="pasos grid grid-4">
+        {pasos.map(([n, t, d]) => (
+          <li class="reveal"><span class="pasos__n">{n}</span><h3>{t}</h3><p>{d}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 7. Interiorismo y reformas -->
+  <section class="section">
+    <div class="wrap split">
+      <div class="split__img reveal">
+        <Image src={mbInteriorismo} alt="Salón abierto con cocina y comedor integrados" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
+        <RefBadge />
+      </div>
+      <div class="split__txt reveal">
+        <span class="eyebrow">Interiorismo y reformas</span>
+        <h2>Espacios con sentido. Espacios con identidad.</h2>
+        <p class="lead">El interiorismo empieza escuchando: cómo vives, qué necesitas y qué quieres sentir en tu casa. A partir de ahí, mobiliario, materiales, distribución y luz trabajan juntos.</p>
+        <div class="btns">
+          <a href="/interiorismo" class="btn">Interiorismo</a>
+          <a href="/reformas" class="btn btn--ghost">Reformas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Materiales -->
+  <section class="section section--arena">
+    <div class="wrap split split--rev">
+      <div class="split__img reveal">
+        <Image src={foto('beatrice/beatrice-08')} alt="Detalle del tejido de un sofá" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
+      </div>
+      <div class="split__txt reveal">
+        <span class="eyebrow">Materiales y tejidos</span>
+        <h2>Materiales que marcan la diferencia.</h2>
+        <p class="lead">Cada modelo admite distintos tejidos, colores y acabados. En el showroom puedes ver y tocar los muestrarios y comparar con calma.</p>
+        <a href={waLink('Hola UNIK, quiero información sobre tejidos y acabados.')} class="btn btn--wa" target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="home_materiales">Pregunta por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Showroom + contacto -->
+  <section class="section" id="contacto">
+    <div class="wrap split">
+      <div class="split__txt reveal">
+        <span class="eyebrow">Visítanos</span>
+        <h2>Ven a descubrir UNIK en persona.</h2>
+        <p class="lead">Te esperamos en San Sebastián de los Reyes para conocer nuestras propuestas y conversar sobre tu espacio.</p>
+        <address>
+          <strong>{site.direccion.calle}</strong><br />
+          {site.direccion.cp} {site.direccion.ciudad} ({site.direccion.provincia})<br />
+          {site.horario.map((h) => <span>{h.dias}: {h.horas}<br /></span>)}
+          <a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="home">{site.telefono}</a>
+        </address>
+        <a href={site.mapsUrl} class="link" target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="home">Cómo llegar</a>
+      </div>
+      <div class="reveal">
+        <ContactForm titulo="Hablemos de tu próximo proyecto." />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; min-height: min(88vh, 860px); display: flex; align-items: flex-end; color: var(--marfil); overflow: hidden; }
+  .hero :global(.hero__img) { position: absolute; inset: 0; }
+  .hero__veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(16 30 44 / 0) 35%, rgb(16 30 44 / 0.65) 100%); }
+  .hero__txt { position: relative; padding-bottom: clamp(48px, 8vw, 96px); width: 100%; }
+  .hero .eyebrow { color: var(--arena); }
+  .hero h1 { max-width: 20ch; }
+  .hero__lead { font-size: clamp(1.05rem, 1.5vw, 1.25rem); max-width: 46ch; margin-bottom: 28px; }
+  .hero__ghost { background: transparent; border-color: var(--marfil); }
+  .hero__ghost:hover { background: var(--marfil); color: var(--azul-noche); border-color: var(--marfil); }
+
+  .trust { border-bottom: 1px solid var(--line); }
+  .trust__in { display: flex; align-items: center; gap: 32px; padding-block: 22px; overflow-x: auto; }
+  .trust__lbl { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--nogal); white-space: nowrap; }
+  .trust ul { display: flex; gap: clamp(20px, 3vw, 44px); list-style: none; margin: 0; padding: 0; }
+  .trust li { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; white-space: nowrap; color: var(--ink-soft); }
+  .trust li.pend { opacity: 0.45; }
+
+  .intro { max-width: 860px; }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 48px); }
+  .head h2 { margin: 0; max-width: 18ch; }
+
+  .col { text-decoration: none; }
+  .col__img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: 16px; }
+  .col__img :global(img) { transition: transform 0.8s var(--ease); }
+  .col:hover .col__img :global(img) { transform: scale(1.04); }
+  .col h3 { margin-bottom: 4px; }
+  .col p { color: var(--ink-soft); font-size: 0.95rem; }
+
+  .pasos { list-style: none; padding: 0; margin: 48px 0 0; }
+  .pasos li { border-top: 1px solid #2a3846; padding-top: 24px; }
+  .pasos__n { font-family: var(--font-display); font-weight: 900; font-size: 2.4rem; color: var(--piedra); display: block; margin-bottom: 12px; }
+  .pasos p { color: #c9c2b8; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+  .split--rev .split__img { order: 2; }
+  .split__img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+  address { font-style: normal; margin: 24px 0; line-height: 1.8; }
+  @media (max-width: 900px) {
+    .split { grid-template-columns: 1fr; }
+    .split--rev .split__img { order: 0; }
+    .split__img { aspect-ratio: 4 / 3; }
+  }
+</style>

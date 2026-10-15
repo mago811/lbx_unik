@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { marcas } from '../../data/site';
+import { porMarca } from '../../data/productos';
+---
+<Base title="Marcas de sofás y mobiliario · UNIK San Sebastián de los Reyes" description="Bobbio, Afosxsofas y otras marcas de sofás y mobiliario que puedes ver en el showroom de UNIK en San Sebastián de los Reyes.">
+  <section class="section">
+    <div class="wrap">
+      <span class="eyebrow">Marcas</span>
+      <h1>Fabricantes en los que confiamos.</h1>
+      <p class="lead">Trabajamos con fabricantes que comparten nuestra forma de entender el diseño: piezas bien hechas, cómodas y pensadas para durar.</p>
+      <div class="grid grid-3 mk">
+        {marcas.map((m) => {
+          const ps = porMarca(m.slug);
+          return (
+            <a href={ps.length ? `/marcas/${m.slug}` : undefined} class:list={['mk__c', { off: !ps.length }]}>
+              <div class="mk__img">
+                {ps.length ? <Image src={ps[0].portada} alt={m.nombre} widths={[480, 800]} sizes="33vw" class="cover" /> : <span>Fotos pendientes</span>}
+              </div>
+              <h2>{m.nombre}</h2>
+              <p>{m.foco}{ps.length ? ` · ${ps.length} modelos` : ''}</p>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .mk { margin-top: 48px; }
+  .mk__c { text-decoration: none; }
+  .mk__c.off { opacity: 0.55; }
+  .mk__img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--arena); display: grid; place-items: center; margin-bottom: 14px; font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--nogal); }
+  .mk h2 { font-size: 1.5rem; margin-bottom: 2px; }
+  .mk p { color: var(--ink-soft); }
+</style>

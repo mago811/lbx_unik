@@ -1,0 +1,60 @@
+---
+// Formulario de consulta / reserva de visita.
+// PREVIEW: no envía. En producción: endpoint en Vercel (/api/contacto) o Formspree.
+// Ver docs/SPECS.md §6.
+interface Props { referencia?: string; tipo?: string; titulo?: string }
+const { referencia = '', tipo = 'Visita al showroom', titulo = 'Cuéntanos qué buscas' } = Astro.props;
+const tipos = ['Visita al showroom', 'Sofás', 'Mobiliario', 'Interiorismo', 'Reformas', 'Otro'];
+---
+<form class="cf" data-form="contacto" novalidate>
+  <h3>{titulo}</h3>
+  <div class="cf__row">
+    <label>Nombre<input name="nombre" autocomplete="name" required /></label>
+    <label>Teléfono<input name="telefono" type="tel" autocomplete="tel" required /></label>
+  </div>
+  <label>Email<input name="email" type="email" autocomplete="email" /></label>
+  <div class="cf__row">
+    <label>Tipo de consulta
+      <select name="tipo">
+        {tipos.map((t) => <option selected={t === tipo}>{t}</option>)}
+      </select>
+    </label>
+    <label>Referencia (si aplica)<input name="referencia" value={referencia} /></label>
+  </div>
+  <label>Mensaje<textarea name="mensaje" rows="4" placeholder="Medidas del espacio, estilo que te gusta, cuándo te vendría bien venir…"></textarea></label>
+  <label class="cf__check"><input type="checkbox" name="privacidad" required /> Acepto la <a href="/legal/privacidad">política de privacidad</a>.</label>
+  <input type="text" name="empresa" class="cf__hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <button class="btn" type="submit">Enviar consulta</button>
+  <p class="cf__ok" hidden>Gracias. Te contestamos en menos de 24 h laborables. <em>(Preview: este formulario aún no envía)</em></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-form="contacto"]').forEach((f) =>
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!f.reportValidity()) return;
+      const w = window as any;
+      (w.dataLayer ||= []).push({ event: 'envio_formulario', tipo: (f.elements.namedItem('tipo') as HTMLSelectElement).value });
+      f.querySelector<HTMLElement>('.cf__ok')!.hidden = false;
+      f.querySelector('button')!.setAttribute('disabled', '');
+    }),
+  );
+</script>
+
+<style>
+  .cf { display: grid; gap: 16px; background: var(--surface); padding: clamp(24px, 4vw, 44px); border: 1px solid var(--line); color: var(--ink); }
+  .cf h3 { margin-bottom: 4px; }
+  .cf__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .cf__row { grid-template-columns: 1fr; } }
+  .cf label { display: grid; gap: 6px; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; }
+  .cf input, .cf select, .cf textarea {
+    font: 400 1rem var(--font-text); color: var(--ink); text-transform: none; letter-spacing: 0;
+    padding: 12px 14px; background: var(--marfil); border: 1px solid var(--line); border-radius: var(--radius);
+  }
+  .cf input:focus, .cf select:focus, .cf textarea:focus { outline: none; border-color: var(--azul-noche); }
+  .cf__check { display: flex !important; align-items: center; gap: 10px !important; text-transform: none !important; letter-spacing: 0 !important; font-size: 0.9rem !important; font-weight: 400 !important; }
+  .cf__check input { width: 18px; height: 18px; }
+  .cf__hp { position: absolute; left: -9999px; }
+  .cf__ok { color: var(--oliva); margin: 0; }
+  .cf .btn { justify-self: start; }
+</style>

@@ -1,0 +1,125 @@
+---
+import Logo from './LogoWordmark.svg';
+
+const colecciones = [
+  ['Sofás', '/sofas'],
+  ['Mobiliario', '/mobiliario'],
+  ['Salones', '/salones'],
+  ['Dormitorios', '/dormitorios'],
+  ['Cocinas', '/cocinas'],
+  ['Exterior', '/exterior'],
+];
+const servicios = [
+  ['Interiorismo', '/interiorismo'],
+  ['Reformas', '/reformas'],
+];
+const path = Astro.url.pathname;
+const activo = (href: string) => path === href || path.startsWith(href + '/');
+---
+<header class="hdr">
+  <div class="hdr__in wrap">
+    <a href="/" class="hdr__logo" aria-label="UNIK — inicio">
+      <Logo />
+      <span class="hdr__tag">Sofás · Mobiliario · Interiorismo · Reformas</span>
+    </a>
+
+    <nav class="hdr__nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd__btn" aria-expanded="false">Colecciones</button>
+        <div class="dd__panel">
+          {colecciones.map(([t, h]) => <a href={h} class:list={{ on: activo(h) }}>{t}</a>)}
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd__btn" aria-expanded="false">Servicios</button>
+        <div class="dd__panel">
+          {servicios.map(([t, h]) => <a href={h} class:list={{ on: activo(h) }}>{t}</a>)}
+        </div>
+      </div>
+      <a href="/marcas" class:list={{ on: activo('/marcas') }}>Marcas</a>
+      <a href="/nosotros" class:list={{ on: activo('/nosotros') }}>Nosotros</a>
+      <a href="/visitanos" class="btn hdr__cta" data-track="cta_reserva_visita" data-ubicacion="header">Reserva tu visita</a>
+    </nav>
+
+    <button class="hdr__burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-movil">
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mm" id="menu-movil" hidden>
+    <div class="wrap">
+      <p class="eyebrow">Colecciones</p>
+      {colecciones.map(([t, h]) => <a href={h}>{t}</a>)}
+      <p class="eyebrow">Servicios</p>
+      {servicios.map(([t, h]) => <a href={h}>{t}</a>)}
+      <p class="eyebrow">UNIK</p>
+      <a href="/marcas">Marcas</a>
+      <a href="/nosotros">Nosotros</a>
+      <a href="/visitanos">Visítanos</a>
+      <a href="/visitanos" class="btn" style="margin-top:24px">Reserva tu visita</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('.hdr__burger')!;
+  const menu = document.getElementById('menu-movil')!;
+  burger.addEventListener('click', () => {
+    const open = burger.getAttribute('aria-expanded') === 'true';
+    burger.setAttribute('aria-expanded', String(!open));
+    menu.hidden = open;
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+  document.querySelectorAll<HTMLButtonElement>('.dd__btn').forEach((b) =>
+    b.addEventListener('click', () => b.setAttribute('aria-expanded', String(b.getAttribute('aria-expanded') !== 'true'))),
+  );
+  const hdr = document.querySelector('.hdr')!;
+  const onScroll = () => hdr.classList.toggle('is-scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; background: var(--marfil); transition: box-shadow 0.25s; }
+  .hdr.is-scrolled { box-shadow: 0 1px 0 var(--line); }
+  .hdr__in { display: flex; align-items: center; justify-content: space-between; height: 84px; gap: 24px; }
+  .hdr__logo { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: var(--azul-noche); }
+  .hdr__logo :global(svg) { height: 38px; width: auto; }
+  .hdr__tag { font-size: 0.55rem; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
+
+  .hdr__nav { display: flex; align-items: center; gap: 30px; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; }
+  .hdr__nav > a:not(.btn), .dd__btn { text-decoration: none; padding: 8px 0; border-bottom: 1px solid transparent; }
+  .hdr__nav > a:not(.btn):hover, .hdr__nav a.on { border-color: currentColor; }
+  .hdr__cta { padding: 0.9em 1.3em; }
+
+  .dd { position: relative; }
+  .dd__btn { font: inherit; letter-spacing: inherit; text-transform: inherit; background: none; border: 0; cursor: pointer; color: inherit; }
+  .dd__btn::after { content: ''; display: inline-block; width: 6px; height: 6px; margin-left: 8px; border-right: 1.5px solid; border-bottom: 1.5px solid; transform: translateY(-3px) rotate(45deg); }
+  .dd__panel {
+    position: absolute; top: 100%; left: -24px; min-width: 220px; padding: 16px 24px;
+    background: var(--surface); border: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 4px;
+    opacity: 0; visibility: hidden; transform: translateY(6px); transition: all 0.2s var(--ease);
+  }
+  .dd__panel a { text-decoration: none; padding: 6px 0; letter-spacing: 0.04em; text-transform: none; font-size: 1rem; font-weight: 400; }
+  .dd__panel a:hover, .dd__panel a.on { color: var(--nogal); }
+  .dd:hover .dd__panel, .dd:focus-within .dd__panel, .dd__btn[aria-expanded='true'] + .dd__panel { opacity: 1; visibility: visible; transform: none; }
+
+  .hdr__burger { display: none; background: none; border: 0; width: 44px; height: 44px; cursor: pointer; position: relative; }
+  .hdr__burger span { position: absolute; left: 10px; right: 10px; height: 2px; background: var(--azul-noche); transition: transform 0.25s; }
+  .hdr__burger span:first-child { top: 17px; }
+  .hdr__burger span:last-child { top: 25px; }
+  .hdr__burger[aria-expanded='true'] span:first-child { transform: translateY(4px) rotate(45deg); }
+  .hdr__burger[aria-expanded='true'] span:last-child { transform: translateY(-4px) rotate(-45deg); }
+
+  .mm { position: fixed; inset: 72px 0 0; background: var(--marfil); overflow-y: auto; padding: 24px 0 120px; }
+  .mm a:not(.btn) { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; text-decoration: none; padding: 4px 0; }
+  .mm .eyebrow { margin: 24px 0 6px; }
+
+  @media (max-width: 1080px) {
+    .hdr__nav { display: none; }
+    .hdr__burger { display: block; }
+    .hdr__in { height: 72px; }
+    .hdr__logo :global(svg) { height: 30px; }
+  }
+</style>

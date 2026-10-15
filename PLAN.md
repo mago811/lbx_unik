@@ -4,6 +4,8 @@
 > Hoy solo tienen redes sociales (@unik_design.es). **Objetivo único: vender** →
 > convertir visitas en **consultas cualificadas y visitas al showroom**.
 
+Estado: **preview funcionando** (Astro). Specs en [`docs/SPECS.md`](docs/SPECS.md); lo que falta en [`docs/PENDIENTES.md`](docs/PENDIENTES.md).
+
 Fuentes: `UNIK.pdf` (estructura premium), `UNIK_Contenidos_Web_Fotos_y_Textos.pdf`
 (textos por sección), logo y moodboard (`assets/`), carpeta Drive de proveedores (`content/proveedores/`).
 
@@ -157,10 +159,10 @@ Modelo de datos por referencia (del PDF, ampliado):
 | Pieza | Elección | Por qué |
 |---|---|---|
 | Framework | **Astro** | Web estática, carga muy rápida (SEO y móvil), fácil de mantener. |
-| Gestor de contenido | **Decap CMS** o **Sanity** | El cliente sube/edita referencias sin tocar código (requisito del PDF). |
+| Gestor de contenido (Fase 2) | **Decap CMS** o **Sanity** | El cliente sube/edita referencias sin tocar código (requisito del PDF). |
 | Imágenes | Pipeline Astro Image → AVIF/WebP, 3 tamaños | Las fotos de proveedores pesan 5–20 MB cada una. |
-| Hosting | Netlify o Vercel | Gratis/barato, formularios y deploy desde GitHub. |
-| Formularios | Netlify Forms / Formspree + antispam + email al cliente | |
+| Hosting | **Vercel** | Deploy desde GitHub, previews por rama. Pendiente de crear. |
+| Formularios | Vercel Function + Resend (o Formspree) + antispam | |
 | Analítica | GA4 + Meta Pixel + banner de cookies (RGPD) | |
 | SEO | Schema `FurnitureStore` + `LocalBusiness`, sitemap, OG images | |
 

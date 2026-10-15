@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site, waLink } from '../data/site';
+const faqs = [
+  ['¿Puedo consultar la disponibilidad de un modelo?', 'Sí. Escríbenos por WhatsApp o desde el formulario indicando el modelo y te respondemos.'],
+  ['¿Puedo pedir información sobre medidas y tapizados?', 'Claro. Cada modelo admite distintas composiciones y tejidos; en el showroom tienes los muestrarios.'],
+  ['¿Dónde está la tienda?', `En ${site.direccion.calle}, ${site.direccion.ciudad} (${site.direccion.provincia}).`],
+  ['¿Cómo solicito presupuesto para un proyecto?', 'Cuéntanos tu idea en el formulario (tipo «Interiorismo» o «Reformas») con medidas o fotos del espacio.'],
+  ['¿Necesito cita para ir al showroom?', 'No es imprescindible, pero si reservas te atendemos con calma y preparamos los modelos que te interesan.'],
+];
+---
+<Base title="Visítanos · Showroom UNIK en San Sebastián de los Reyes" description={`Showroom de sofás y mobiliario en ${site.direccion.calle}, ${site.direccion.ciudad}. Horario, cómo llegar y reserva de visita.`}>
+  <section class="section">
+    <div class="wrap vis">
+      <div>
+        <span class="eyebrow">Visítanos</span>
+        <h1>Ven a descubrir UNIK en persona.</h1>
+        <p class="lead">Te esperamos en San Sebastián de los Reyes para conocer nuestras propuestas de mobiliario y conversar sobre tu espacio. Contacta con nosotros para preguntar por una referencia, compartir medidas o solicitar información sobre un proyecto.</p>
+        <div class="vis__datos">
+          <div><p class="eyebrow">Dirección</p><p>{site.direccion.calle}<br />{site.direccion.cp} {site.direccion.ciudad}<br />{site.direccion.provincia}</p></div>
+          <div><p class="eyebrow">Horario</p>{site.horario.map((h) => <p>{h.dias}<br />{h.horas}</p>)}</div>
+          <div><p class="eyebrow">Teléfono</p><p><a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="visitanos">{site.telefono}</a></p></div>
+        </div>
+        <div class="btns">
+          <a href={site.mapsUrl} class="btn" target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="visitanos">Cómo llegar</a>
+          <a href={waLink('Hola UNIK, me gustaría reservar una visita al showroom.')} class="btn btn--wa" target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="visitanos">Reservar por WhatsApp</a>
+        </div>
+      </div>
+      <ContactForm titulo="Reserva tu visita" tipo="Visita al showroom" />
+    </div>
+  </section>
+
+  <section class="mapa">
+    <!-- PENDIENTE: sustituir por foto real de la fachada/showroom + mapa embebido tras consentimiento de cookies -->
+    <div class="wrap mapa__ph">
+      <p class="eyebrow">Foto del showroom</p>
+      <p>Pendiente: fotografía real de la fachada y del interior de la tienda.</p>
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="wrap" style="max-width:860px">
+      <h2>Preguntas frecuentes</h2>
+      {faqs.map(([q, a]) => (
+        <details class="faq"><summary>{q}</summary><p>{a}</p></details>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .vis { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: start; }
+  .vis__datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 32px 0; }
+  .vis__datos .eyebrow { margin-bottom: 6px; }
+  .vis__datos a { text-decoration: none; }
+  .mapa__ph { background: var(--arena); aspect-ratio: 21 / 7; display: grid; place-content: center; text-align: center; color: var(--nogal); }
+  .faq { border-bottom: 1px solid var(--line); padding: 18px 0; }
+  .faq summary { cursor: pointer; font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; }
+  .faq p { margin: 12px 0 0; color: var(--ink-soft); }
+  @media (max-width: 900px) { .vis { grid-template-columns: 1fr; } .vis__datos { grid-template-columns: 1fr 1fr; } .mapa__ph { aspect-ratio: 4 / 3; } }
+</style>

@@ -1,0 +1,16 @@
+---
+import ColeccionPage from '../components/ColeccionPage.astro';
+import { porColeccion, foto } from '../data/productos';
+const lista = porColeccion('sofas').filter((p) => !p.tipos.includes('Pufs y auxiliares'));
+---
+<ColeccionPage
+  seoTitle="Sofás en San Sebastián de los Reyes · Tienda de sofás · UNIK"
+  seoDescription="Sofás de diseño en San Sebastián de los Reyes: rinconeras, chaise longue, modulares, relax y sofás cama de Bobbio y Afosxsofas. Ven a probarlos al showroom."
+  eyebrow="Sofás"
+  titulo="El sofá alrededor del que sucede todo."
+  texto="Un buen sofá reúne muchas cosas: descanso, conversación, tiempo compartido y momentos para uno mismo. Explora nuestra selección de modelos y encuentra las proporciones, el diseño y el acabado que mejor encajan con tu salón. Te ayudamos a comparar opciones para elegir con criterio y comodidad."
+  hero={foto('claudia/claudia-02')}
+  productos={lista}
+  ctaPrincipal="Consultar un sofá"
+  tipoConsulta="Sofás"
+/>

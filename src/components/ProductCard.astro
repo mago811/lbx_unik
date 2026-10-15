@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import type { Producto } from '../data/productos';
+import { marcas } from '../data/site';
+interface Props { p: Producto }
+const { p } = Astro.props;
+const marca = marcas.find((m) => m.slug === p.marca)?.nombre;
+---
+<a href={`/catalogo/${p.slug}`} class="pc reveal" data-tipos={p.tipos.join('|')}>
+  <div class="pc__img">
+    <Image src={p.portada} alt={`${p.nombre} de ${marca}`} widths={[480, 800]} sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw" class="cover" />
+  </div>
+  <div class="pc__txt">
+    <span class="pc__marca">{marca}</span>
+    <h3>{p.nombre}</h3>
+    <span class="pc__tipos">{p.tipos.join(' · ')}</span>
+  </div>
+</a>
+
+<style>
+  .pc { text-decoration: none; display: block; }
+  .pc__img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface); }
+  .pc__img :global(img) { transition: transform 0.8s var(--ease); }
+  .pc:hover .pc__img :global(img) { transform: scale(1.04); }
+  .pc__txt { padding-top: 14px; }
+  .pc__marca { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--nogal); font-weight: 500; }
+  .pc h3 { margin: 4px 0 2px; }
+  .pc__tipos { font-size: 0.9rem; color: var(--ink-soft); }
+</style>

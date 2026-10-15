@@ -1,0 +1,23 @@
+---
+import ColeccionPage from '../../components/ColeccionPage.astro';
+import { marcas } from '../../data/site';
+import { porMarca } from '../../data/productos';
+
+export function getStaticPaths() {
+  return marcas.filter((m) => porMarca(m.slug).length).map((m) => ({ params: { slug: m.slug }, props: { m } }));
+}
+const { m } = Astro.props;
+const lista = porMarca(m.slug);
+const hero = (lista.find((p) => p.destacado) ?? lista[0]).portada;
+---
+<ColeccionPage
+  seoTitle={`${m.nombre} en Madrid · ${m.foco} · UNIK San Sebastián de los Reyes`}
+  seoDescription={`Descubre los modelos de ${m.nombre} en el showroom de UNIK en San Sebastián de los Reyes: ${m.foco.toLowerCase()}.`}
+  eyebrow={m.nombre}
+  titulo={`${m.nombre} en San Sebastián de los Reyes.`}
+  texto={`${m.foco}. Ven a ver los modelos de ${m.nombre} en nuestro showroom, prueba su confort y elige tejido y composición con nuestro asesoramiento.`}
+  hero={hero}
+  productos={lista}
+  ctaPrincipal={`Consultar ${m.nombre}`}
+  tipoConsulta="Sofás"
+/>

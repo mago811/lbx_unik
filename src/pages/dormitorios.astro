@@ -1,0 +1,18 @@
+---
+import ColeccionPage from '../components/ColeccionPage.astro';
+import { porColeccion } from '../data/productos';
+import hero from '../../assets/moodboard/03-dormitorio.jpg';
+---
+<ColeccionPage
+  seoTitle="Dormitorios y muebles de dormitorio · UNIK Madrid"
+  seoDescription="Camas, cabeceros, almacenaje, butacas y sofás cama para el dormitorio. Showroom en San Sebastián de los Reyes."
+  eyebrow="Dormitorios"
+  titulo="Un espacio hecho para desconectar."
+  texto="El dormitorio invita a bajar el ritmo. Apostamos por composiciones que transmiten calma: proporciones bien resueltas, texturas agradables y mobiliario pensado para organizar el espacio sin renunciar al estilo. Inspírate con diferentes formas de entender el descanso."
+  hero={hero}
+  heroRef
+  productos={porColeccion('dormitorios')}
+  pendiente="Pendiente el catálogo de dormitorio de Guardia. Mientras, se muestran sofás cama y butacas."
+  ctaPrincipal="Solicitar asesoramiento"
+  tipoConsulta="Mobiliario"
+/>

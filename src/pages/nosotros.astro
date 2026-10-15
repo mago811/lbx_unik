@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { foto } from '../data/productos';
+---
+<Base title="Nosotros · UNIK Sofás San Sebastián de los Reyes" description="UNIK: diseño cercano y decisiones bien pensadas. Showroom de sofás, mobiliario e interiorismo en San Sebastián de los Reyes.">
+  <section class="section">
+    <div class="wrap nos">
+      <div>
+        <span class="eyebrow">Nosotros</span>
+        <h1>Diseño cercano, decisiones bien pensadas.</h1>
+        <p class="lead">En UNIK nos mueve la idea de que el buen diseño tiene que disfrutarse todos los días. Nos interesan las piezas que combinan carácter y utilidad, los interiores acogedores y el asesoramiento que ayuda a elegir con tranquilidad.</p>
+        <p class="lead">Desde nuestra ubicación en San Sebastián de los Reyes, queremos ser un espacio al que venir a descubrir, comparar y dar forma a nuevas ideas para el hogar.</p>
+        <a href="/visitanos" class="btn">Reserva tu visita</a>
+      </div>
+      <div class="nos__img">
+        <Image src={foto('linnen/linen-05')} alt="Salón con sofá Linnen" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
+      </div>
+    </div>
+  </section>
+  <section class="section section--arena">
+    <div class="wrap" style="text-align:center">
+      <p class="eyebrow">Pendiente</p>
+      <p>Fotos del equipo y del showroom · historia de UNIK · años en Sanse · reseñas de Google.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .nos { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .nos__img { aspect-ratio: 4 / 5; overflow: hidden; }
+  @media (max-width: 900px) { .nos { grid-template-columns: 1fr; } }
+</style>
