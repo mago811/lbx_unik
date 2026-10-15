@@ -4,6 +4,8 @@ import Base from '../layouts/Base.astro';
 import ProductCard from '../components/ProductCard.astro';
 import ContactForm from '../components/ContactForm.astro';
 import RefBadge from '../components/RefBadge.astro';
+import Logo from '../components/LogoWordmark.svg';
+import heroRecorte from '../../assets/hero/claudia-recorte.png';
 import { destacados, foto } from '../data/productos';
 import { site, marcas, waLink } from '../data/site';
 
@@ -13,7 +15,7 @@ import mbCocina from '../../assets/moodboard/04-cocina.jpg';
 import mbExterior from '../../assets/moodboard/05-exterior.jpg';
 import mbInteriorismo from '../../assets/moodboard/06-interiorismo-reformas.jpg';
 
-const hero = foto('cotton/cotton-03-dual-arena');
+const heroFondo = foto('claudia/claudia-01-drom');
 const colecciones = [
   { t: 'Sofás', h: '/sofas', img: foto('beatrice/beatrice-01'), ref: false, d: 'Rinconeras, chaise longue, modulares, relax y sofás cama.' },
   { t: 'Salones', h: '/salones', img: foto('mauro/mauro-03'), ref: false, d: 'Composiciones completas para la zona de estar.' },
@@ -30,20 +32,32 @@ const pasos = [
 ];
 ---
 <Base
+  overlay
   title="UNIK Sofás y Mobiliario · San Sebastián de los Reyes"
   description="Showroom de sofás, mobiliario e interiorismo en San Sebastián de los Reyes (Madrid). Descubre nuestras colecciones y ven a verlas en persona."
 >
-  <!-- 1. Hero -->
-  <section class="hero">
-    <Image src={hero} alt="Salón con sofá Cotton de Bobbio en tonos arena" widths={[800, 1400, 2000]} sizes="100vw" class="cover hero__img" loading="eager" fetchpriority="high" />
-    <div class="hero__veil"></div>
-    <div class="wrap hero__txt">
-      <span class="eyebrow">Showroom en San Sebastián de los Reyes</span>
-      <h1>Espacios para vivir.<br />Diseño para sentir.</h1>
-      <p class="hero__lead">Sofás, mobiliario e interiorismo para crear una casa que hable de ti. Ven a probarlos en persona.</p>
-      <div class="btns">
-        <a href="/visitanos" class="btn btn--light" data-track="cta_reserva_visita" data-ubicacion="hero">Reserva tu visita</a>
-        <a href="/sofas" class="btn hero__ghost">Ver colecciones</a>
+  <!-- 1. Hero: foto a sangre, wordmark gigante detrás del sofá recortado -->
+  <section class="hero" aria-labelledby="hero-titulo">
+    <div class="hero__media" aria-hidden="true">
+      <Image src={heroFondo} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" class="hero__layer hero__bg" loading="eager" fetchpriority="high" />
+    </div>
+    <h1 id="hero-titulo" class="hero__marca">
+      <span class="sr-only">UNIK Sofás, San Sebastián de los Reyes. Espacios para vivir. Diseño para sentir.</span>
+      <span class="hero__logo" aria-hidden="true"><Logo /></span>
+    </h1>
+    <div class="hero__media hero__media--front" aria-hidden="true">
+      <Image src={heroRecorte} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" class="hero__layer hero__cut" loading="eager" />
+    </div>
+
+    <div class="hero__pie">
+      <p class="hero__claim" aria-hidden="true">
+        <span class="ln"><span>Espacios para vivir.</span></span>
+        <span class="ln"><span><em>Diseño para sentir.</em></span></span>
+      </p>
+      <a href="#intro" class="hero__scroll" aria-label="Seguir leyendo"><span></span></a>
+      <div class="hero__dcha">
+        <span class="ln"><a href="/visitanos" class="hero__cta" data-track="cta_reserva_visita" data-ubicacion="hero">Reserva tu visita <span aria-hidden="true">→</span></a></span>
+        <span class="ln hero__credito"><span>Sofá Claudia · Bobbio</span></span>
       </div>
     </div>
   </section>
@@ -59,7 +73,7 @@ const pasos = [
   </section>
 
   <!-- 3. Intro -->
-  <section class="section">
+  <section class="section" id="intro">
     <div class="wrap intro reveal">
       <span class="eyebrow">UNIK</span>
       <h2>El diseño empieza en cada detalle.</h2>
@@ -179,16 +193,66 @@ const pasos = [
 </Base>
 
 <style>
-  .hero { position: relative; min-height: min(88vh, 860px); display: flex; align-items: flex-end; color: var(--marfil); overflow: hidden; }
-  .hero :global(.hero__img) { position: absolute; inset: 0; }
-  .hero__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(16 30 44 / 0.5), rgb(16 30 44 / 0) 65%), linear-gradient(180deg, rgb(16 30 44 / 0) 40%, rgb(16 30 44 / 0.6) 100%); }
-  @media (max-width: 760px) { .hero__veil { background: linear-gradient(180deg, rgb(16 30 44 / 0.05) 20%, rgb(16 30 44 / 0.75) 100%); } }
-  .hero__txt { position: relative; padding-bottom: clamp(48px, 8vw, 96px); width: 100%; }
-  .hero .eyebrow { color: var(--arena); }
-  .hero h1 { max-width: 20ch; }
-  .hero__lead { font-size: clamp(1.05rem, 1.5vw, 1.25rem); max-width: 46ch; margin-bottom: 28px; }
-  .hero__ghost { background: transparent; border-color: var(--marfil); }
-  .hero__ghost:hover { background: var(--marfil); color: var(--azul-noche); border-color: var(--marfil); }
+  /* ---------- Hero ---------- */
+  .hero { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: #8f978d; isolation: isolate; }
+  .hero__media { position: absolute; inset: 0; z-index: 0; }
+  .hero__media--front { z-index: 2; pointer-events: none; }
+  .hero :global(.hero__layer) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; animation: hero-zoom 2.6s var(--ease-out) both; }
+
+  .hero__marca { position: absolute; z-index: 1; left: 0; right: 0; bottom: 33%; margin: 0; display: flex; justify-content: center; }
+  .hero__logo { display: block; width: min(90vw, 150svh); color: var(--blanco-roto); animation: hero-wordmark 1.6s 0.25s var(--ease-out) both; }
+  .hero__logo :global(svg) { display: block; width: 100%; height: auto; }
+
+  .hero__pie {
+    position: absolute; z-index: 3; left: 0; right: 0; bottom: 0;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 24px;
+    padding: 0 calc(var(--gutter) + 72px) clamp(24px, 4vh, 44px) var(--gutter); color: var(--tinta);
+  }
+  .hero__claim { margin: 0; font-family: var(--font-display); font-weight: 340; font-size: clamp(1.3rem, 2.1vw, 2rem); line-height: 1.08; letter-spacing: -0.01em; }
+  .hero__claim em { font-style: italic; }
+  .hero__dcha { justify-self: end; text-align: right; display: grid; gap: 6px; }
+  .hero__cta { display: inline-block; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; background: var(--blanco-roto); color: var(--tinta); padding: 12px 16px; transition: background 0.3s, color 0.3s; }
+  .hero__cta:hover { background: var(--terracota); color: var(--blanco-roto); }
+  .hero__credito { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--tinta); opacity: 0.75; }
+
+  .hero__scroll { display: block; width: 1px; height: 56px; background: rgb(22 20 18 / 0.25); position: relative; overflow: hidden; }
+  .hero__scroll span { position: absolute; left: 0; top: 0; width: 1px; height: 40%; background: var(--tinta); animation: hero-scroll 2.2s 1.8s var(--ease-out) infinite; }
+
+  /* Texto por líneas */
+  .hero .ln { display: block; overflow: hidden; }
+  .hero .ln > * { display: inline-block; animation: hero-line 1.1s var(--ease-out) both; }
+  .hero .ln:nth-child(1) > * { animation-delay: 0.9s; }
+  .hero .ln:nth-child(2) > * { animation-delay: 1.02s; }
+  .hero__dcha .ln:nth-child(1) > * { animation-delay: 1.15s; }
+  .hero__dcha .ln:nth-child(2) > * { animation-delay: 1.25s; }
+
+  @keyframes hero-zoom { from { transform: scale(1.1); } to { transform: none; } }
+  @keyframes hero-wordmark { from { clip-path: inset(100% 0 0 0); transform: translateY(12%); } to { clip-path: inset(0 0 0 0); transform: none; } }
+  @keyframes hero-line { from { transform: translateY(110%); } to { transform: none; } }
+  @keyframes hero-scroll { 0% { transform: translateY(-100%); } 60%, 100% { transform: translateY(260%); } }
+
+  /* Pantallas verticales (móvil y tablet): logo más arriba, claim sobre la pared */
+  @media (max-width: 760px), (orientation: portrait) {
+    .hero { height: 100svh; }
+    .hero :global(.hero__layer) { object-position: 52% 50%; }
+    .hero__marca { bottom: 43.5%; }
+    .hero__logo { width: 92vw; }
+    /* Deja sitio a la barra inferior fija */
+    .hero__pie { position: static; display: block; padding: 0; }
+    .hero__claim {
+      position: absolute; z-index: 3; top: calc(72px + 5svh); right: var(--gutter); max-width: 80%;
+      text-align: right; font-size: clamp(1.45rem, 6.6vw, 1.9rem);
+    }
+    .hero__scroll { display: none; }
+    .hero__dcha { position: absolute; z-index: 3; right: var(--gutter); bottom: calc(68px + 2.5svh + env(safe-area-inset-bottom)); }
+  }
+  @media (min-width: 761px) and (orientation: portrait) {
+    .hero__dcha { bottom: 4svh; right: calc(var(--gutter) + 72px); }
+    .hero__claim { font-size: clamp(1.9rem, 4vw, 2.6rem); max-width: 60%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero :global(.hero__layer), .hero__logo, .hero .ln > *, .hero__scroll span { animation: none; }
+  }
 
   .trust { border-bottom: 1px solid var(--line); }
   .trust__in { display: flex; align-items: center; gap: 32px; padding-block: 22px; overflow-x: auto; }

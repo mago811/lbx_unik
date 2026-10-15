@@ -9,8 +9,10 @@ interface Props {
   title: string;
   description: string;
   waTexto?: string;
+  /** Cabecera transparente sobre un hero a pantalla completa */
+  overlay?: boolean;
 }
-const { title, description, waTexto = 'Hola UNIK, me gustaría hacer una consulta.' } = Astro.props;
+const { title, description, waTexto = 'Hola UNIK, me gustaría hacer una consulta.', overlay = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 
 const schema = {
@@ -52,9 +54,9 @@ const schema = {
   <body>
     <a class="sr-only" href="#main">Saltar al contenido</a>
     {site.pendiente && (
-      <div class="preview-bar">Preview interna · datos y textos pendientes de validar con UNIK</div>
+      <div class="preview-bar" title="Datos y textos pendientes de validar con UNIK">Preview interna</div>
     )}
-    <Header />
+    <Header overlay={overlay} />
     <main id="main"><slot /></main>
     <Footer />
     <MobileBar waTexto={waTexto} />
@@ -76,9 +78,12 @@ const schema = {
     </script>
     <style>
       .preview-bar {
-        background: var(--nogal); color: var(--marfil); text-align: center;
-        font-size: 0.75rem; letter-spacing: 0.08em; padding: 6px 16px;
+        position: fixed; left: 16px; top: 96px; z-index: 70;
+        background: var(--terracota); color: var(--blanco-roto);
+        font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 10px;
+        pointer-events: none;
       }
+      @media (max-width: 760px) { .preview-bar { top: auto; bottom: calc(60px + env(safe-area-inset-bottom)); left: 12px; } }
     </style>
   </body>
 </html>

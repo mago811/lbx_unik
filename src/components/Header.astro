@@ -13,10 +13,12 @@ const servicios = [
   ['Interiorismo', '/interiorismo'],
   ['Reformas', '/reformas'],
 ];
+interface Props { overlay?: boolean }
+const { overlay = false } = Astro.props;
 const path = Astro.url.pathname;
 const activo = (href: string) => path === href || path.startsWith(href + '/');
 ---
-<header class="hdr">
+<header class:list={["hdr", { "hdr--over": overlay }]}>
   <div class="hdr__in wrap">
     <a href="/" class="hdr__logo" aria-label="UNIK — inicio">
       <Logo />
@@ -74,14 +76,26 @@ const activo = (href: string) => path === href || path.startsWith(href + '/');
     b.addEventListener('click', () => b.setAttribute('aria-expanded', String(b.getAttribute('aria-expanded') !== 'true'))),
   );
   const hdr = document.querySelector('.hdr')!;
-  const onScroll = () => hdr.classList.toggle('is-scrolled', scrollY > 8);
+  const umbral = hdr.classList.contains('hdr--over') ? innerHeight * 0.85 : 8;
+  const onScroll = () => hdr.classList.toggle('is-scrolled', scrollY > umbral);
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 </script>
 
 <style>
-  .hdr { position: sticky; top: 0; z-index: 50; background: var(--marfil); transition: box-shadow 0.25s; }
+  .hdr { position: sticky; top: 0; z-index: 50; background: var(--marfil); transition: box-shadow 0.25s, background 0.4s, color 0.4s; }
   .hdr.is-scrolled { box-shadow: 0 1px 0 var(--line); }
+
+  /* Sobre el hero: transparente, texto claro y sin logo (el hero ya lo muestra en grande) */
+  .hdr--over { position: fixed; left: 0; right: 0; background: transparent; color: var(--tinta); }
+  .hdr--over .hdr__logo { color: inherit; opacity: 0; transform: translateY(-6px); transition: opacity 0.4s, transform 0.4s; }
+  .hdr--over .hdr__burger span { background: currentColor; }
+  .hdr--over:not(.is-scrolled) .hdr__cta { background: transparent; border-color: currentColor; color: inherit; }
+  .hdr--over.is-scrolled { background: var(--hueso); color: var(--tinta); }
+  .hdr--over.is-scrolled .hdr__logo { opacity: 1; transform: none; }
+  .hdr--over .dd__panel, .hdr--over .mm { color: var(--tinta); }
+  .hdr--over:has(.hdr__burger[aria-expanded='true']) { background: var(--hueso); color: var(--tinta); }
+  .hdr--over:has(.hdr__burger[aria-expanded='true']) .hdr__logo { opacity: 1; transform: none; }
   .hdr__in { display: flex; align-items: center; justify-content: space-between; height: 84px; gap: 24px; }
   .hdr__logo { display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: var(--azul-noche); }
   .hdr__logo :global(svg) { height: 38px; width: auto; }
