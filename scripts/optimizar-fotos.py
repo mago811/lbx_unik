@@ -16,12 +16,16 @@ def slug(s):
 prov, src, dst = sys.argv[1], sys.argv[2], sys.argv[3]
 out_root = os.path.join(dst, slug(prov))
 done = skipped = 0
-for root, _, files in os.walk(src):
+# Nunca procesar tarifas, listas de precios ni duplicados conocidos
+EXCLUIR = ("tarifa", "precio", "loomled")
+
+for root, dirs, files in os.walk(src):
+    dirs[:] = [d for d in dirs if not any(x in d.lower() for x in EXCLUIR)]
     rel = os.path.relpath(root, src)
     parts = [slug(p) for p in rel.split(os.sep) if p not in (".", "jpeg", "JPEG")]
     for f in sorted(files):
         stem, ext = os.path.splitext(f)
-        if ext.lower() not in EXTS:
+        if ext.lower() not in EXTS or any(x in f.lower() for x in EXCLUIR):
             continue
         out_dir = os.path.join(out_root, *[p for p in parts if p != "jpeg"])
         out = os.path.join(out_dir, slug(stem) + ".jpg")
