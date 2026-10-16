@@ -72,13 +72,21 @@ const pasos = [
     </div>
   </section>
 
-  <!-- 3. Intro -->
-  <section class="section" id="intro">
-    <div class="wrap intro reveal">
-      <span class="eyebrow">UNIK</span>
-      <h2>El diseño empieza en cada detalle.</h2>
-      <p class="lead">En UNIK creemos que un espacio bien pensado cambia la forma de vivirlo. Seleccionamos mobiliario, sofás y propuestas para cada estancia, combinando estética, comodidad y funcionalidad. Desde una pieza especial hasta la transformación de un ambiente, queremos ayudarte a crear una casa que hable de ti.</p>
-      <a href="/nosotros" class="link">Conócenos</a>
+  <!-- 3. Intro: cita editorial descompensada + detalle vertical con parallax -->
+  <section class="intro" id="intro" aria-labelledby="intro-titulo">
+    <div class="intro__grid">
+      <h2 id="intro-titulo" class="intro__kicker"><span>El diseño empieza</span> <em>en cada detalle</em></h2>
+      <p class="intro__cita" data-lines>En UNIK creemos que un espacio bien pensado cambia la forma de vivirlo.</p>
+      <div class="intro__cuerpo">
+        <p>Seleccionamos mobiliario, sofás y propuestas para cada estancia, combinando estética, comodidad y funcionalidad. Desde una pieza especial hasta la transformación de un ambiente, queremos ayudarte a crear una casa que hable de ti.</p>
+        <a href="/nosotros" class="intro__link">Conócenos <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="intro__foto">
+        <div class="intro__marco">
+          <Image src={foto('cotton/cotton-07')} alt="Mano ajustando la funda de lino de un sofá Cotton" widths={[480, 800, 1200]} sizes="(max-width: 760px) 92vw, 34vw" class="intro__img" data-parallax="0.1" />
+        </div>
+        <figcaption>Funda desenfundable · Cotton, Bobbio</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -192,6 +200,10 @@ const pasos = [
   </section>
 </Base>
 
+<script>
+  import '../scripts/motion';
+</script>
+
 <style>
   /* ---------- Hero ---------- */
   .hero { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: #8f978d; isolation: isolate; }
@@ -213,7 +225,8 @@ const pasos = [
   .hero__dcha { justify-self: end; text-align: right; display: grid; gap: 6px; }
   .hero__cta { display: inline-block; font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; background: var(--blanco-roto); color: var(--tinta); padding: 12px 16px; transition: background 0.3s, color 0.3s; }
   .hero__cta:hover { background: var(--terracota); color: var(--blanco-roto); }
-  .hero__credito { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--tinta); opacity: 0.75; }
+  .hero__credito { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--tinta); }
+  .hero__credito > span { background: var(--blanco-roto); padding: 3px 8px; }
 
   .hero__scroll { display: block; width: 1px; height: 56px; background: rgb(22 20 18 / 0.25); position: relative; overflow: hidden; }
   .hero__scroll span { position: absolute; left: 0; top: 0; width: 1px; height: 40%; background: var(--tinta); animation: hero-scroll 2.2s 1.8s var(--ease-out) infinite; }
@@ -261,7 +274,37 @@ const pasos = [
   .trust li { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; white-space: nowrap; color: var(--ink-soft); }
   .trust li.pend { opacity: 0.45; }
 
-  .intro { max-width: 860px; }
+  /* ---------- Intro ---------- */
+  .intro { padding: clamp(96px, 14vw, 200px) 0 clamp(96px, 12vw, 180px); overflow: hidden; }
+  .intro__grid {
+    display: grid; grid-template-columns: repeat(12, 1fr); column-gap: clamp(16px, 2vw, 32px);
+    padding: 0 var(--gutter); max-width: 1600px; margin: 0 auto; align-items: start;
+  }
+  .intro__kicker {
+    grid-column: 1 / 5; grid-row: 1; margin: 0 0 clamp(32px, 5vw, 64px);
+    font-family: var(--font-text); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em; line-height: 1.4;
+  }
+  .intro__kicker em { font-family: var(--font-display); font-size: 1.15rem; font-weight: 340; letter-spacing: 0; color: var(--terracota); display: block; }
+  .intro__cita {
+    grid-column: 1 / 9; grid-row: 2; margin: 0;
+    font-family: var(--font-display); font-weight: 320; font-size: clamp(2.2rem, 4.4vw, 4.4rem);
+    line-height: 1.04; letter-spacing: -0.025em; text-wrap: balance;
+  }
+  .intro__cuerpo { grid-column: 5 / 9; grid-row: 3; margin-top: clamp(40px, 6vw, 96px); font-size: 1rem; line-height: 1.65; color: var(--ink-soft); max-width: 40ch; }
+  .intro__link { display: inline-block; margin-top: 8px; color: var(--tinta); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--terracota); padding-bottom: 2px; }
+  .intro__link:hover { color: var(--terracota); }
+  .intro__foto { grid-column: 10 / 13; grid-row: 1 / 4; margin: clamp(-120px, -8vw, -40px) 0 0; }
+  .intro__marco { aspect-ratio: 3 / 4.2; overflow: hidden; }
+  .intro :global(.intro__img) { width: 100%; height: 120%; object-fit: cover; margin-top: -10%; }
+  .intro figcaption { margin-top: 12px; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--ink-soft); }
+
+  @media (max-width: 900px) {
+    .intro__kicker { grid-column: 1 / -1; }
+    .intro__cita { grid-column: 1 / -1; font-size: clamp(2rem, 8.4vw, 2.8rem); }
+    .intro__foto { grid-column: 3 / -1; grid-row: 3; margin: 48px 0 0; }
+    .intro__cuerpo { grid-column: 1 / -1; grid-row: 4; margin-top: 40px; }
+  }
+
   .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 48px); }
   .head h2 { margin: 0; max-width: 18ch; }
 

@@ -35,8 +35,8 @@ Con `prefers-reduced-motion` todo aparece sin movimiento.
 
 | # | Sección | Solución | Estado |
 |---|---|---|---|
-| 1 | Hero | Foto a sangre (100svh) del sofá Claudia. Wordmark UNIK gigante entre el fondo y el **sofá recortado** (capa PNG generada con rembg, `assets/hero/claudia-recorte.png`). Claim pequeño en Fraunces y un único enlace. En vertical, el claim va sobre la pared | ✅ Para revisar |
-| 2 | Intro | Cita editorial grande (Fraunces 40–64 px), descompensada a la izquierda, con foto vertical de detalle con parallax | Pendiente |
+| 1 | Hero | Foto a sangre (100svh) del sofá Claudia. Wordmark UNIK gigante entre el fondo y el **sofá recortado** (capa PNG generada con rembg, `assets/hero/claudia-recorte.png`). Claim pequeño en Fraunces y un único enlace. En vertical, el claim va sobre la pared | ✅ Aprobado |
+| 2 | Intro | Cita editorial grande (Fraunces 40–64 px), descompensada a la izquierda, con foto vertical de detalle con parallax | ✅ Para revisar |
 | 3 | Colecciones | Lista tipográfica gigante. Escritorio: la foto sigue al cursor. Móvil: nombre + foto a ancho completo | Pendiente |
 | 4 | Sofás | Galería horizontal anclada al scroll, una pieza por pantalla. Móvil: carrusel nativo con scroll-snap | Pendiente |
 | 5 | Cómo trabajamos | Recorrido de 4 frases alternadas izquierda/derecha con una imagen de apoyo | Pendiente |
