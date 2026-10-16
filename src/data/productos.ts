@@ -1,8 +1,9 @@
 import type { ImageMetadata } from 'astro';
 
-// Todas las fotos optimizadas de proveedores (content/proveedores/**).
+// Fotos de las marcas que ya están en el catálogo. Al añadir una marca, sumarla aquí:
+// el glob solo admite literales y todo lo que importa acaba en el build.
 const todas = import.meta.glob<{ default: ImageMetadata }>(
-  '/content/proveedores/**/*.jpg',
+  '/content/proveedores/{bobbio,afosxsofas}/**/*.jpg',
   { eager: true },
 );
 const rutas = Object.keys(todas).sort();

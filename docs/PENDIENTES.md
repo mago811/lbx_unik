@@ -12,6 +12,7 @@
 | 6 | ¿Qué servicios dan de verdad? Cocinas, exterior, reformas (integrales/parciales), interiorismo (alcance) | Decidir qué páginas se publican | Lanzamiento |
 | 7 | Validar "Cómo trabajamos" (gestión de pedido, entrega) | Bloque de la home | Lanzamiento |
 | 8 | Autorización de proveedores para usar fotos y nombres | Catálogo y franja de marcas | Lanzamiento |
+| 8b | ¿Bobbio es una marca de Pedro Ortiz? (sus fotos vienen en carpetas de Pedro Ortiz) | Mostrarlas como uno o dos fabricantes | Fase 1 |
 | 9 | Qué modelos tienen **expuestos** en tienda | Sello "Ven a verlo" | Fase 2 |
 | 10 | ¿Mostrar "precio desde"? | Fichas | Decisión |
 | 11 | Fotos de Rodri Diseño, Oslo, Pedro Ortiz | Mobiliario y sofás (ver estado de descarga) | Fase 1–2 |
@@ -32,7 +33,8 @@
 | 4 | Textos legales (privacidad, cookies, aviso legal) | ⏳ |
 | 5 | `/api/contacto` con Resend + honeypot | ✅ Hecho |
 | 6 | Revisar el logo vectorizado (se generó automáticamente desde PNG; idealmente pedir el original al diseñador) | ⚠️ |
-| 7 | Descargar e integrar el resto de proveedores del Drive | En curso |
+| 7 | Descargar del Drive y optimizar las fotos de los 7 proveedores (1.297 fotos, ver `content/proveedores/INVENTARIO.md`) | ✅ Hecho |
+| 7b | Sumar al catálogo Pedro Ortiz, Oslo, Rodri Diseño, Modesto Navarro y los nuevos Sira y Zenit de Bobbio | ⏳ |
 | 8 | CMS (Decap) para que el cliente edite el catálogo | Fase 2 |
 
 ## Checklist antes de publicar
