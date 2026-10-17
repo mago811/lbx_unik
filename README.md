@@ -5,7 +5,7 @@ Web de **UNIK Sofás** (San Sebastián de los Reyes, Madrid). Astro, estática, 
 - Plan y estrategia: [`PLAN.md`](PLAN.md)
 - Especificaciones: [`docs/SPECS.md`](docs/SPECS.md)
 - Pendientes / qué necesitamos: [`docs/PENDIENTES.md`](docs/PENDIENTES.md)
-- Fotos de proveedores: [`content/proveedores/INVENTARIO.md`](content/proveedores/INVENTARIO.md)
+- Fotos de proveedores: [`content/proveedores/INVENTARIO.md`](content/proveedores/INVENTARIO.md) (regenerar con `python3 scripts/inventario.py`)
 
 ## Arrancar
 
