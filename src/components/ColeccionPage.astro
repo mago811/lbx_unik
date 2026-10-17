@@ -30,63 +30,56 @@ const lista = p.productos ?? [];
 const tipos = tiposDe(lista);
 ---
 <Base title={p.seoTitle} description={p.seoDescription} waTexto={`Hola UNIK, quiero información sobre ${p.eyebrow.toLowerCase()}.`}>
-  <section class="ph">
-    <div class="wrap ph__grid">
-      <div class="ph__txt">
-        <span class="eyebrow">{p.eyebrow}</span>
-        <h1>{p.titulo}</h1>
-        <p class="lead">{p.texto}</p>
-        <div class="btns">
-          <a href="#consulta" class="btn" data-track="cta_consulta" data-ubicacion={p.eyebrow}>{p.ctaPrincipal}</a>
-          <a href={waLink(`Hola UNIK, quiero información sobre ${p.eyebrow.toLowerCase()}.`)} class="btn btn--wa" target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion={p.eyebrow}>WhatsApp</a>
+  <!-- Cabecera editorial: título enorme a todo el ancho, foto grande descompensada -->
+  <header class="ch">
+    <p class="ch__kicker"><span>{p.eyebrow}</span>{lista.length > 0 && <em>{lista.length} modelos</em>}</p>
+    <h1 class="ch__titulo" data-lines>{p.titulo}</h1>
+    <div class="ch__grid">
+      <div class="ch__txt">
+        <p>{p.texto}</p>
+        <div class="ch__links">
+          <a href="#consulta" data-track="cta_consulta" data-ubicacion={p.eyebrow}>{p.ctaPrincipal} <span aria-hidden="true">→</span></a>
+          <a href={waLink(`Hola UNIK, quiero información sobre ${p.eyebrow.toLowerCase()}.`)} target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion={p.eyebrow}>WhatsApp <span aria-hidden="true">→</span></a>
         </div>
-        {p.pendiente && <p class="ph__pend">⚠ {p.pendiente}</p>}
+        {p.pendiente && <p class="ch__pend">⚠ {p.pendiente}</p>}
       </div>
-      <div class="ph__img">
-        <Image src={p.hero} alt={p.titulo} width={1400} widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 55vw" class="cover" loading="eager" />
+      <figure class="ch__img">
+        <Image src={p.hero} alt={p.titulo} width={1600} widths={[700, 1100, 1600]} sizes="(max-width: 900px) 100vw, 66vw" class="ch__foto" loading="eager" fetchpriority="high" data-parallax="0.06" />
         {p.heroRef && <RefBadge />}
-      </div>
+      </figure>
     </div>
-  </section>
+  </header>
 
   {lista.length > 0 && (
-    <section class="section section--surface">
-      <div class="wrap">
-        <div class="cat__head">
-          <h2>{lista.length} modelos</h2>
-          {tipos.length > 1 && (
-            <div class="filtros" role="group" aria-label="Filtrar por tipo">
-              <button class="on" data-f="">Todos</button>
-              {tipos.map((t) => <button data-f={t}>{t}</button>)}
-            </div>
-          )}
+    <section class="cat" aria-label="Modelos">
+      {tipos.length > 1 && (
+        <div class="filtros" role="group" aria-label="Filtrar por tipo">
+          <button class="on" data-f="" aria-pressed="true">Todos <sup>{lista.length}</sup></button>
+          {tipos.map((t) => <button data-f={t} aria-pressed="false">{t} <sup>{lista.filter((x) => x.tipos.includes(t)).length}</sup></button>)}
         </div>
-        <div class="grid grid-3 cat__grid">
-          {lista.map((x) => <ProductCard p={x} />)}
-        </div>
+      )}
+      <div class="cat__grid">
+        {lista.map((x) => <ProductCard p={x} />)}
       </div>
     </section>
   )}
 
   {p.bloques && (
-    <section class="section">
-      <div class="wrap">
-        {p.bloquesTitulo && <h2 class="reveal" style="max-width:20ch">{p.bloquesTitulo}</h2>}
-        <div class="grid grid-3 bloques">
-          {p.bloques.map((b, i) => (
-            <div class="reveal"><span class="bloques__n">{String(i + 1).padStart(2, '0')}</span><h3>{b.t}</h3><p>{b.d}</p></div>
-          ))}
-        </div>
-      </div>
+    <section class="blq">
+      {p.bloquesTitulo && <h2 class="blq__titulo">{p.bloquesTitulo}</h2>}
+      <ol class="blq__lista">
+        {p.bloques.map((b, i) => (
+          <li><span class="blq__n">{String(i + 1).padStart(2, '0')}</span><h3>{b.t}</h3><p>{b.d}</p></li>
+        ))}
+      </ol>
     </section>
   )}
 
-  <section class="section section--arena" id="consulta">
-    <div class="wrap consulta">
+  <section class="cons" id="consulta">
+    <div class="cons__grid">
       <div>
-        <span class="eyebrow">Te asesoramos</span>
-        <h2>¿Lo vemos juntos?</h2>
-        <p class="lead">Cuéntanos qué buscas, comparte medidas o fotos de tu espacio y te proponemos opciones. O ven directamente al showroom.</p>
+        <h2 class="cons__titulo">¿Lo vemos <em>juntos?</em></h2>
+        <p>Cuéntanos qué buscas, comparte medidas o fotos de tu espacio y te proponemos opciones. O ven directamente al showroom.</p>
       </div>
       <ContactForm tipo={p.tipoConsulta} titulo={p.ctaPrincipal} />
     </div>
@@ -94,10 +87,14 @@ const tipos = tiposDe(lista);
 </Base>
 
 <script>
+  import '../scripts/motion';
   document.querySelectorAll<HTMLButtonElement>('.filtros button').forEach((b) =>
     b.addEventListener('click', () => {
       const f = b.dataset.f!;
-      document.querySelectorAll('.filtros button').forEach((x) => x.classList.toggle('on', x === b));
+      document.querySelectorAll<HTMLButtonElement>('.filtros button').forEach((x) => {
+        x.classList.toggle('on', x === b);
+        x.setAttribute('aria-pressed', String(x === b));
+      });
       document.querySelectorAll<HTMLElement>('.cat__grid .pc').forEach((card) => {
         card.hidden = !!f && !card.dataset.tipos!.split('|').includes(f);
       });
@@ -106,26 +103,57 @@ const tipos = tiposDe(lista);
 </script>
 
 <style>
-  .ph { padding: clamp(32px, 5vw, 64px) 0 clamp(56px, 7vw, 96px); }
-  .ph__grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
-  .ph__img { position: relative; aspect-ratio: 5 / 4; overflow: hidden; }
-  .ph__pend { margin-top: 20px; font-size: 0.85rem; color: var(--nogal); background: var(--arena); padding: 10px 14px; }
-  @media (max-width: 900px) { .ph__grid { grid-template-columns: 1fr; } .ph__img { order: -1; } }
-
-  .cat__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; }
-  .cat__head h2 { margin: 0; font-size: clamp(1.5rem, 2.4vw, 2rem); }
-  .filtros { display: flex; flex-wrap: wrap; gap: 8px; }
-  .filtros button {
-    font: 500 0.75rem var(--font-text); letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 9px 14px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; border-radius: 999px;
+  .ch { padding: clamp(40px, 6vw, 96px) var(--gutter) clamp(64px, 8vw, 128px); max-width: 1600px; margin: 0 auto; }
+  .ch__kicker { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 500; margin: 0 0 clamp(16px, 2vw, 32px); }
+  .ch__kicker em { font-family: var(--font-display); font-size: 1.05rem; font-weight: 340; color: var(--terracota); }
+  .ch__titulo { font-weight: 300; font-size: clamp(3rem, 9.4vw, 9.6rem); line-height: 0.92; letter-spacing: -0.045em; max-width: 14ch; margin: 0 0 clamp(32px, 5vw, 72px); }
+  .ch__grid { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; align-items: end; }
+  .ch__txt { grid-column: 1 / 5; font-size: 1rem; color: var(--ink-soft); }
+  .ch__links { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 8px; }
+  .ch__links a { color: var(--tinta); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--terracota); padding-bottom: 2px; }
+  .ch__links a:hover { color: var(--terracota); }
+  .ch__pend { margin-top: 24px; font-size: 0.8rem; color: var(--terracota); border-left: 2px solid var(--terracota); padding-left: 12px; }
+  .ch__img { grid-column: 5 / 13; margin: 0; position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+  .ch :global(.ch__foto) { width: 100%; height: 112%; object-fit: cover; margin-top: -6%; }
+  @media (max-width: 900px) {
+    .ch__txt, .ch__img { grid-column: 1 / -1; }
+    .ch__img { order: -1; margin-bottom: 32px; aspect-ratio: 4 / 3; }
   }
-  .filtros button.on, .filtros button:hover { background: var(--azul-noche); color: var(--marfil); border-color: var(--azul-noche); }
+
+  .cat { padding: 0 var(--gutter) clamp(80px, 10vw, 160px); max-width: 1600px; margin: 0 auto; }
+  .filtros { display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 18px 0; margin-bottom: clamp(32px, 4vw, 56px); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); position: sticky; top: 84px; background: var(--hueso); z-index: 5; }
+  .filtros button { font: 400 0.95rem var(--font-text); background: none; border: 0; padding: 4px 0; color: var(--ink-soft); cursor: pointer; border-bottom: 1px solid transparent; }
+  .filtros button sup { font-size: 0.65em; color: var(--piedra); }
+  .filtros button:hover { color: var(--tinta); }
+  .filtros button.on { color: var(--tinta); border-bottom-color: var(--terracota); }
+  @media (max-width: 1080px) { .filtros { top: 72px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .filtros button { white-space: nowrap; } }
+
+  /* Rejilla asimétrica: ritmo 7-5 / 4-4-4 */
+  .cat__grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(40px, 5vw, 80px) clamp(16px, 2vw, 32px); }
+  .cat__grid > :global(.pc) { grid-column: span 4; }
+  .cat__grid > :global(.pc:nth-child(5n + 1)) { grid-column: span 7; }
+  .cat__grid > :global(.pc:nth-child(5n + 2)) { grid-column: span 5; margin-top: clamp(40px, 8vw, 140px); }
   .cat__grid :global(.pc[hidden]) { display: none; }
+  @media (max-width: 900px) {
+    .cat__grid > :global(.pc), .cat__grid > :global(.pc:nth-child(n)) { grid-column: span 6; margin-top: 0; }
+  }
+  @media (max-width: 600px) {
+    .cat__grid > :global(.pc), .cat__grid > :global(.pc:nth-child(n)) { grid-column: 1 / -1; }
+  }
 
-  .bloques { margin-top: 40px; }
-  .bloques > div { border-top: 1px solid var(--line); padding-top: 20px; }
-  .bloques__n { font-family: var(--font-display); font-weight: 900; font-size: 1.8rem; color: var(--piedra); }
+  .blq { padding: clamp(80px, 10vw, 160px) var(--gutter); background: var(--arena); }
+  .blq__titulo { font-weight: 300; font-size: clamp(2.4rem, 5vw, 5rem); letter-spacing: -0.035em; max-width: 1600px; margin: 0 auto clamp(40px, 5vw, 72px); }
+  .blq__lista { list-style: none; padding: 0; margin: 0 auto; max-width: 1600px; }
+  .blq__lista li { display: grid; grid-template-columns: 3.5rem 1fr 1fr; gap: 16px; align-items: baseline; padding: clamp(20px, 3vw, 36px) 0; border-top: 1px solid rgb(22 20 18 / 0.15); }
+  .blq__n { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-soft); }
+  .blq__lista h3 { font-weight: 320; font-size: clamp(1.8rem, 3.4vw, 3.4rem); letter-spacing: -0.03em; margin: 0; }
+  .blq__lista p { margin: 0; color: var(--ink-soft); max-width: 44ch; }
+  @media (max-width: 760px) { .blq__lista li { grid-template-columns: 2.4rem 1fr; } .blq__lista p { grid-column: 2; } }
 
-  .consulta { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(32px, 5vw, 80px); align-items: start; }
-  @media (max-width: 900px) { .consulta { grid-template-columns: 1fr; } }
+  .cons { padding: clamp(80px, 10vw, 160px) var(--gutter); border-top: 1px solid var(--line); }
+  .cons__grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(40px, 6vw, 112px); max-width: 1600px; margin: 0 auto; align-items: start; }
+  .cons__titulo { font-weight: 300; font-size: clamp(3rem, 7vw, 7rem); line-height: 0.95; letter-spacing: -0.04em; }
+  .cons__titulo em { color: var(--terracota); }
+  .cons__grid > div > p { color: var(--ink-soft); max-width: 40ch; }
+  @media (max-width: 900px) { .cons__grid { grid-template-columns: 1fr; } }
 </style>

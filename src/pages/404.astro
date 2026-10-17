@@ -2,9 +2,22 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Página no encontrada · UNIK" description="Página no encontrada">
-  <section class="section"><div class="wrap">
-    <h1>Esta página no existe.</h1>
-    <p class="lead">Pero seguro que encuentras algo que te guste.</p>
-    <div class="btns"><a href="/" class="btn">Ir al inicio</a><a href="/sofas" class="btn btn--ghost">Ver sofás</a></div>
-  </div></section>
+  <section class="e404">
+    <p class="e404__n">404</p>
+    <h1 class="e404__titulo">Esta página no existe. <em>Pero seguro que encuentras algo que te guste.</em></h1>
+    <div class="e404__links">
+      <a href="/">Ir al inicio <span aria-hidden="true">→</span></a>
+      <a href="/sofas">Ver sofás <span aria-hidden="true">→</span></a>
+      <a href="/visitanos">Visitar el showroom <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .e404 { padding: clamp(64px, 10vw, 160px) var(--gutter); max-width: 1600px; margin: 0 auto; min-height: 70svh; }
+  .e404__n { font-family: var(--font-display); font-weight: 300; font-size: clamp(6rem, 22vw, 22rem); line-height: 0.8; letter-spacing: -0.06em; color: var(--terracota); margin: 0 0 24px; }
+  .e404__titulo { font-weight: 300; font-size: clamp(2rem, 4.6vw, 4.6rem); letter-spacing: -0.035em; max-width: 20ch; }
+  .e404__titulo em { color: var(--ink-soft); }
+  .e404__links { display: flex; gap: 32px; flex-wrap: wrap; margin-top: 40px; }
+  .e404__links a { font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--terracota); padding-bottom: 2px; }
+</style>

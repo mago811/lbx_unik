@@ -12,13 +12,6 @@
   --terracota: #a54b2a;    /* único acento */
   --whatsapp: #25d366;
 
-  /* Alias del sistema anterior (se eliminan al rehacer cada sección) */
-  --azul-noche: var(--tinta);
-  --marfil: var(--hueso);
-  --blanco-calido: var(--blanco-roto);
-  --nogal: var(--terracota);
-  --oliva: #5f6650;
-
   /* Roles */
   --bg: var(--hueso);
   --surface: var(--blanco-roto);
@@ -71,7 +64,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .section { padding: clamp(64px, 9vw, 128px) 0; }
 .section--surface { background: var(--surface); }
 .section--arena { background: var(--arena); }
-.section--dark { background: var(--azul-noche); color: var(--marfil); }
+.section--dark { background: var(--tinta); color: var(--hueso); }
 
 .eyebrow {
   font-family: var(--font-text);
@@ -79,7 +72,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--nogal);
+  color: var(--terracota);
   margin-bottom: 1rem;
   display: block;
 }
@@ -93,16 +86,16 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   padding: 0.95em 1.6em;
   font: 500 0.85rem/1 var(--font-text);
   letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
-  border: 1px solid var(--azul-noche); border-radius: var(--radius);
-  background: var(--azul-noche); color: var(--marfil);
+  border: 1px solid var(--tinta); border-radius: var(--radius);
+  background: var(--tinta); color: var(--hueso);
   cursor: pointer;
   transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
 }
-.btn:hover { background: var(--nogal); border-color: var(--nogal); }
+.btn:hover { background: var(--terracota); border-color: var(--terracota); }
 .btn--ghost { background: transparent; color: var(--ink); }
-.btn--ghost:hover { background: var(--azul-noche); color: var(--marfil); border-color: var(--azul-noche); }
-.btn--light { background: var(--marfil); color: var(--azul-noche); border-color: var(--marfil); }
-.btn--light:hover { background: transparent; color: var(--marfil); }
+.btn--ghost:hover { background: var(--tinta); color: var(--hueso); border-color: var(--tinta); }
+.btn--light { background: var(--hueso); color: var(--tinta); border-color: var(--hueso); }
+.btn--light:hover { background: transparent; color: var(--hueso); }
 .btn--wa { background: var(--whatsapp); border-color: var(--whatsapp); color: #08311a; }
 .btn--wa:hover { background: #1fb457; border-color: #1fb457; }
 .btns { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -130,5 +123,5 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   html { scroll-behavior: auto; }
 }
 
-:focus-visible { outline: 2px solid var(--nogal); outline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

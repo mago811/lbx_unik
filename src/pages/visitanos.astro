@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
+import { Image } from 'astro:assets';
 import { site, waLink } from '../data/site';
+import { foto } from '../data/productos';
 const faqs = [
   ['¿Puedo consultar la disponibilidad de un modelo?', 'Sí. Escríbenos por WhatsApp o desde el formulario indicando el modelo y te respondemos.'],
   ['¿Puedo pedir información sobre medidas y tapizados?', 'Claro. Cada modelo admite distintas composiciones y tejidos; en el showroom tienes los muestrarios.'],
@@ -11,52 +13,81 @@ const faqs = [
 ];
 ---
 <Base title="Visítanos · Showroom UNIK en San Sebastián de los Reyes" description={`Showroom de sofás y mobiliario en ${site.direccion.calle}, ${site.direccion.ciudad}. Horario, cómo llegar y reserva de visita.`}>
-  <section class="section">
-    <div class="wrap vis">
-      <div>
-        <span class="eyebrow">Visítanos</span>
-        <h1>Ven a descubrir UNIK en persona.</h1>
-        <p class="lead">Te esperamos en San Sebastián de los Reyes para conocer nuestras propuestas de mobiliario y conversar sobre tu espacio. Contacta con nosotros para preguntar por una referencia, compartir medidas o solicitar información sobre un proyecto.</p>
-        <div class="vis__datos">
-          <div><p class="eyebrow">Dirección</p><p>{site.direccion.calle}<br />{site.direccion.cp} {site.direccion.ciudad}<br />{site.direccion.provincia}</p></div>
-          <div><p class="eyebrow">Horario</p>{site.horario.map((h) => <p>{h.dias}<br />{h.horas}</p>)}</div>
-          <div><p class="eyebrow">Teléfono</p><p><a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="visitanos">{site.telefono}</a></p></div>
-        </div>
-        <div class="btns">
-          <a href={site.mapsUrl} class="btn" target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="visitanos">Cómo llegar</a>
-          <a href={waLink('Hola UNIK, me gustaría reservar una visita al showroom.')} class="btn btn--wa" target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="visitanos">Reservar por WhatsApp</a>
+  <section class="vs">
+    <p class="vs__kicker">Visítanos <em>Showroom en {site.direccion.ciudad}</em></p>
+    <h1 class="vs__titulo" data-lines>Ven a descubrir UNIK en persona.</h1>
+    <div class="vs__grid">
+      <div class="vs__datos">
+        <p class="vs__dir">
+          <a href={site.mapsUrl} target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="visitanos">{site.direccion.calle}</a>
+          <em>{site.direccion.cp} {site.direccion.ciudad}</em>
+        </p>
+        <dl class="vs__info">
+          {site.horario.map((h) => <div><dt>{h.dias}</dt><dd>{h.horas}</dd></div>)}
+          <div><dt>Teléfono</dt><dd><a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="visitanos">{site.telefono}</a></dd></div>
+        </dl>
+        <p class="vs__texto">Te esperamos para conocer nuestras propuestas de mobiliario y conversar sobre tu espacio. Contacta con nosotros para preguntar por una referencia, compartir medidas o solicitar información sobre un proyecto.</p>
+        <div class="vs__links">
+          <a href={site.mapsUrl} target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="visitanos">Cómo llegar <span aria-hidden="true">→</span></a>
+          <a href={waLink('Hola UNIK, me gustaría reservar una visita al showroom.')} target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="visitanos">Reservar por WhatsApp <span aria-hidden="true">→</span></a>
         </div>
       </div>
-      <ContactForm titulo="Reserva tu visita" tipo="Visita al showroom" />
+      <div class="vs__form"><ContactForm titulo="Reserva tu visita" tipo="Visita al showroom" /></div>
     </div>
   </section>
 
-  <section class="mapa">
-    <!-- PENDIENTE: sustituir por foto real de la fachada/showroom + mapa embebido tras consentimiento de cookies -->
-    <div class="wrap mapa__ph">
-      <p class="eyebrow">Foto del showroom</p>
-      <p>Pendiente: fotografía real de la fachada y del interior de la tienda.</p>
-    </div>
-  </section>
+  <!-- PENDIENTE: foto real de la fachada/showroom + mapa embebido tras consentimiento de cookies -->
+  <figure class="vs__foto">
+    <Image src={foto('elliot/elliot-01')} alt="Sofá Elliot de Bobbio en un salón luminoso" width={1800} widths={[800, 1300, 1800]} sizes="100vw" class="vs__img" data-parallax="0.08" />
+    <figcaption>Fotos del showroom y de la fachada, próximamente</figcaption>
+  </figure>
 
-  <section class="section section--surface">
-    <div class="wrap" style="max-width:860px">
-      <h2>Preguntas frecuentes</h2>
+  <section class="faq">
+    <h2 class="faq__titulo">Preguntas <em>frecuentes</em></h2>
+    <div class="faq__lista">
       {faqs.map(([q, a]) => (
-        <details class="faq"><summary>{q}</summary><p>{a}</p></details>
+        <details class="faq__item"><summary>{q}</summary><p>{a}</p></details>
       ))}
     </div>
   </section>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  })} />
 </Base>
 
+<script>
+  import '../scripts/motion';
+</script>
+
 <style>
-  .vis { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: start; }
-  .vis__datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 32px 0; }
-  .vis__datos .eyebrow { margin-bottom: 6px; }
-  .vis__datos a { text-decoration: none; }
-  .mapa__ph { background: var(--arena); aspect-ratio: 21 / 7; display: grid; place-content: center; text-align: center; color: var(--nogal); }
-  .faq { border-bottom: 1px solid var(--line); padding: 18px 0; }
-  .faq summary { cursor: pointer; font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; }
-  .faq p { margin: 12px 0 0; color: var(--ink-soft); }
-  @media (max-width: 900px) { .vis { grid-template-columns: 1fr; } .vis__datos { grid-template-columns: 1fr 1fr; } .mapa__ph { aspect-ratio: 4 / 3; } }
+  .vs { padding: clamp(40px, 6vw, 96px) var(--gutter) clamp(80px, 9vw, 140px); max-width: 1600px; margin: 0 auto; }
+  .vs__kicker { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 500; margin: 0 0 24px; }
+  .vs__kicker em { font-family: var(--font-display); font-size: 1.05rem; font-weight: 340; color: var(--terracota); }
+  .vs__titulo { font-weight: 300; font-size: clamp(3rem, 8.4vw, 8.6rem); line-height: 0.92; letter-spacing: -0.045em; max-width: 13ch; margin-bottom: clamp(48px, 6vw, 96px); }
+  .vs__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(40px, 6vw, 112px); align-items: start; }
+  .vs__dir { margin: 0 0 32px; font-family: var(--font-display); font-weight: 300; font-size: clamp(2rem, 3.6vw, 3.6rem); line-height: 1.02; letter-spacing: -0.03em; }
+  .vs__dir a { text-decoration: none; }
+  .vs__dir em { display: block; color: var(--terracota); }
+  .vs__info { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 12px 40px; margin: 0 0 32px; }
+  .vs__info dt { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+  .vs__info dd { margin: 4px 0 0; font-family: var(--font-display); font-size: 1.3rem; }
+  .vs__info a { text-decoration: none; }
+  .vs__texto { color: var(--ink-soft); max-width: 46ch; }
+  .vs__links { display: flex; gap: 28px; flex-wrap: wrap; }
+  .vs__links a { font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--terracota); padding-bottom: 2px; }
+  .vs__links a:hover { color: var(--terracota); }
+  .vs__foto { margin: 0; height: 80svh; overflow: hidden; position: relative; }
+  .vs__foto :global(.vs__img) { width: 100%; height: 116%; object-fit: cover; margin-top: -8%; }
+  .vs__foto figcaption { position: absolute; left: var(--gutter); bottom: 16px; font-size: 0.72rem; background: var(--blanco-roto); padding: 4px 8px; }
+  .faq { padding: clamp(80px, 9vw, 140px) var(--gutter); display: grid; grid-template-columns: 1fr 1.6fr; gap: clamp(40px, 6vw, 112px); max-width: 1600px; margin: 0 auto; }
+  .faq__titulo { font-weight: 300; font-size: clamp(2.6rem, 5vw, 5rem); line-height: 0.95; letter-spacing: -0.035em; }
+  .faq__titulo em { display: block; color: var(--terracota); }
+  .faq__lista { border-top: 1px solid var(--line); }
+  .faq__item { border-bottom: 1px solid var(--line); padding: 20px 0; }
+  .faq__item summary { cursor: pointer; font-family: var(--font-display); font-weight: 340; font-size: clamp(1.25rem, 1.8vw, 1.6rem); letter-spacing: -0.01em; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  .faq__item summary::after { content: '+'; color: var(--terracota); transition: transform 0.3s; }
+  .faq__item[open] summary::after { transform: rotate(45deg); }
+  .faq__item p { margin: 12px 0 0; color: var(--ink-soft); max-width: 60ch; }
+  @media (max-width: 900px) { .vs__grid, .faq { grid-template-columns: 1fr; } .vs__info { grid-template-columns: 1fr 1fr; } .vs__foto { height: 56svh; } }
 </style>

@@ -1,0 +1,68 @@
+---
+// Lista tipográfica gigante: nombres enormes, uno por línea.
+// Escritorio con ratón: la foto de cada elemento sigue al cursor (data-cursor-list, ver scripts/motion.ts).
+// Táctil o pantalla estrecha: la foto aparece debajo de cada nombre a ancho completo.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import RefBadge from './RefBadge.astro';
+
+interface Item { t: string; h: string; img: ImageMetadata; ref?: boolean; d: string; n: string }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+<ul class="cols__lista" data-cursor-list>
+  {items.map((c, i) => (
+    <li class="cols__item">
+      <a href={c.h} class="cols__link">
+        <span class="cols__num">{String(i + 1).padStart(2, '0')}</span>
+        <span class="cols__nombre">{c.t}</span>
+        <span class="cols__meta">{c.d}<br /><span class="cols__n">{c.n}</span></span>
+      </a>
+      <figure class="cols__foto">
+        <Image src={c.img} alt="" width={900} widths={[480, 900]} sizes="(hover: hover) 26vw, 100vw" class="cols__img" />
+        {c.ref && <RefBadge />}
+      </figure>
+    </li>
+  ))}
+</ul>
+
+<script>
+  import '../scripts/motion';
+</script>
+
+<style>
+  .cols__lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .cols__item { border-bottom: 1px solid var(--line); }
+  .cols__link {
+    display: grid; grid-template-columns: 3.5rem 1fr minmax(180px, 26ch); align-items: center; gap: 16px;
+    padding: clamp(10px, 1.6vw, 22px) 0; text-decoration: none; position: relative; z-index: 2;
+  }
+  .cols__num { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-soft); }
+  .cols__nombre {
+    font-family: var(--font-display); font-weight: 320; font-size: clamp(3rem, 9vw, 8.6rem);
+    line-height: 0.95; letter-spacing: -0.035em; transition: transform 0.6s var(--ease-out), color 0.4s;
+  }
+  .cols__meta { font-size: 0.85rem; color: var(--ink-soft); text-align: right; line-height: 1.4; }
+  .cols__n { color: var(--terracota); }
+  .cols__foto { margin: 0; position: relative; }
+  .cols__foto :global(.cols__img) { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Escritorio con ratón: la foto flota y sigue al cursor */
+  @media (hover: hover) and (pointer: fine) and (min-width: 761px) {
+    .cols__lista:hover .cols__nombre { color: rgb(22 20 18 / 0.22); }
+    .cols__item:hover .cols__nombre { color: var(--tinta); transform: translateX(1.5vw); }
+    .cols__item:hover .cols__nombre { font-style: italic; }
+    .cols__foto {
+      position: fixed; left: 0; top: 0; z-index: 1; width: clamp(220px, 22vw, 380px); aspect-ratio: 4 / 5; overflow: hidden;
+      pointer-events: none; opacity: 0; transform: translate3d(var(--cx, 50vw), var(--cy, 50vh), 0) translate(-50%, -50%) scale(0.9);
+      transition: opacity 0.35s, transform 0.35s var(--ease-out);
+    }
+    .cols__item:hover .cols__foto { opacity: 1; transform: translate3d(var(--cx, 50vw), var(--cy, 50vh), 0) translate(-50%, -50%) scale(1); }
+  }
+  /* Táctil o pantalla estrecha: cada nombre con su foto debajo a ancho completo */
+  @media (hover: none), (pointer: coarse), (max-width: 760px) {
+    .cols__link { grid-template-columns: 2.4rem 1fr; }
+    .cols__meta { grid-column: 2; text-align: left; }
+    .cols__foto { aspect-ratio: 4 / 3; overflow: hidden; margin-bottom: 20px; }
+  }
+</style>
