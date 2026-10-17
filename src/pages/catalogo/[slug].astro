@@ -14,6 +14,7 @@ const marca = marcas.find((m) => m.slug === p.marca)!;
 const relacionados = productos.filter((x) => x.slug !== p.slug && x.tipos.some((t) => p.tipos.includes(t))).slice(0, 3);
 const ref = `${p.nombre} (${marca.nombre})`;
 const coleccion = p.colecciones[0];
+const NOMBRES = { sofas: 'Sofás', mobiliario: 'Mobiliario', salones: 'Salones', dormitorios: 'Dormitorios' } as const;
 const tapizado = p.colecciones.includes('sofas') || p.tipos.includes('Silla');
 const tipoConsulta = p.colecciones.includes('sofas') ? 'Sofás' : 'Mobiliario';
 ---
@@ -24,7 +25,7 @@ const tipoConsulta = p.colecciones.includes('sofas') ? 'Sofás' : 'Mobiliario';
 >
   <article class="fp">
     <header class="fp__head">
-      <nav class="fp__crumbs" aria-label="Migas de pan"><a href="/">Inicio</a> / <a href={`/${coleccion}`}>{coleccion[0].toUpperCase() + coleccion.slice(1)}</a> / {p.nombre}</nav>
+      <nav class="fp__crumbs" aria-label="Migas de pan"><a href="/">Inicio</a> / <a href={`/${coleccion}`}>{NOMBRES[coleccion]}</a> / {p.nombre}</nav>
       <h1 class="fp__nombre" data-lines>{p.nombre}</h1>
       <p class="fp__sub"><a href={`/marcas/${marca.slug}`}>{marca.nombre}</a><span>{p.tipos.join(' · ')}</span></p>
     </header>
