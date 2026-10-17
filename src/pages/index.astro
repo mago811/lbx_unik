@@ -1,35 +1,38 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import ProductCard from '../components/ProductCard.astro';
 import ContactForm from '../components/ContactForm.astro';
 import RefBadge from '../components/RefBadge.astro';
 import Logo from '../components/LogoWordmark.svg';
 import heroRecorte from '../../assets/hero/claudia-recorte.png';
-import { destacados, foto } from '../data/productos';
+import { destacados, foto, porColeccion, productos } from '../data/productos';
 import { site, marcas, waLink } from '../data/site';
 
-import mbComedor from '../../assets/moodboard/02-comedor-mobiliario.jpg';
 import mbDormitorio from '../../assets/moodboard/03-dormitorio.jpg';
 import mbCocina from '../../assets/moodboard/04-cocina.jpg';
 import mbExterior from '../../assets/moodboard/05-exterior.jpg';
 import mbInteriorismo from '../../assets/moodboard/06-interiorismo-reformas.jpg';
 
 const heroFondo = foto('claudia/claudia-01-drom');
+const n = (c: Parameters<typeof porColeccion>[0]) => `${porColeccion(c).length} modelos`;
 const colecciones = [
-  { t: 'Sofás', h: '/sofas', img: foto('beatrice/beatrice-01'), ref: false, d: 'Rinconeras, chaise longue, modulares, relax y sofás cama.' },
-  { t: 'Salones', h: '/salones', img: foto('mauro/mauro-03'), ref: false, d: 'Composiciones completas para la zona de estar.' },
-  { t: 'Mobiliario', h: '/mobiliario', img: mbComedor, ref: true, d: 'Mesas, sillas, aparadores y butacas.' },
-  { t: 'Dormitorios', h: '/dormitorios', img: mbDormitorio, ref: true, d: 'Camas, cabeceros y almacenaje.' },
-  { t: 'Cocinas', h: '/cocinas', img: mbCocina, ref: true, d: 'Distribuciones y materiales para el día a día.' },
-  { t: 'Exterior', h: '/exterior', img: mbExterior, ref: true, d: 'Terrazas y jardines como parte de la casa.' },
+  { t: 'Sofás', h: '/sofas', img: foto('beatrice/beatrice-01'), ref: false, d: 'Rinconeras, chaise longue, relax y sofás cama', n: n('sofas') },
+  { t: 'Salones', h: '/salones', img: foto('mauro/mauro-05-isco'), ref: false, d: 'Composiciones completas para la zona de estar', n: n('salones') },
+  { t: 'Mobiliario', h: '/mobiliario', img: foto('sc002-costera-jun-023-mesa-pie-ovalado'), ref: false, d: 'Mesas, sillas, aparadores y butacas', n: n('mobiliario') },
+  { t: 'Dormitorios', h: '/dormitorios', img: mbDormitorio, ref: true, d: 'Descanso, sofás cama y butacas', n: n('dormitorios') },
+  { t: 'Cocinas', h: '/cocinas', img: mbCocina, ref: true, d: 'Distribuciones y materiales para el día a día', n: 'Consúltanos' },
+  { t: 'Exterior', h: '/exterior', img: mbExterior, ref: true, d: 'Terrazas y jardines como parte de la casa', n: 'Consúltanos' },
 ];
+const totalSofas = porColeccion('sofas').filter((p) => !p.tipos.includes('Pufs y auxiliares')).length;
+const galeria = destacados.filter((p) => p.colecciones.includes('sofas')).slice(0, 8);
+const nombreMarca = (slug: string) => marcas.find((m) => m.slug === slug)?.nombre ?? '';
 const pasos = [
-  ['01', 'Ven al showroom', 'Siéntate, compara modelos y toca los tejidos en San Sebastián de los Reyes.'],
-  ['02', 'Elige medida y acabado', 'Te ayudamos con la composición, el tapizado y el color que encajan con tu salón.'],
-  ['03', 'Lo preparamos', 'Gestionamos el pedido con el fabricante y te mantenemos informado.'],
-  ['04', 'Lo disfrutas en casa', 'Coordinamos la entrega para que solo tengas que estrenarlo.'],
+  ['Ven al showroom', 'Siéntate, compara modelos y toca los tejidos en San Sebastián de los Reyes.'],
+  ['Elige medida y acabado', 'Te ayudamos con la composición, el tapizado y el color que encajan con tu salón.'],
+  ['Lo preparamos', 'Gestionamos el pedido con el fabricante y te mantenemos informado.'],
+  ['Lo disfrutas en casa', 'Coordinamos la entrega para que solo tengas que estrenarlo.'],
 ];
+const marcasConFotos = marcas.filter((m) => productos.some((p) => p.marca === m.slug));
 ---
 <Base
   overlay
@@ -62,16 +65,6 @@ const pasos = [
     </div>
   </section>
 
-  <!-- 2. Franja de confianza -->
-  <section class="trust">
-    <div class="wrap trust__in">
-      <span class="trust__lbl">Trabajamos con</span>
-      <ul>
-        {marcas.map((m) => <li class:list={{ pend: !m.confirmada }}>{m.nombre}</li>)}
-      </ul>
-    </div>
-  </section>
-
   <!-- 3. Intro: cita editorial descompensada + detalle vertical con parallax -->
   <section class="intro" id="intro" aria-labelledby="intro-titulo">
     <div class="intro__grid">
@@ -90,111 +83,138 @@ const pasos = [
     </div>
   </section>
 
-  <!-- 4. Colecciones -->
-  <section class="section section--surface">
-    <div class="wrap">
-      <div class="head reveal">
-        <div>
-          <span class="eyebrow">Colecciones</span>
-          <h2>Cada estancia, su propuesta.</h2>
-        </div>
-        <a href="/sofas" class="btn btn--ghost">Descubrir colecciones</a>
-      </div>
-      <div class="grid grid-3 cols">
-        {colecciones.map((c) => (
-          <a href={c.h} class="col reveal">
-            <div class="col__img">
-              <Image src={c.img} alt={c.t} width={800} widths={[480, 800]} sizes="(max-width: 600px) 100vw, 33vw" class="cover" />
-              {c.ref && <RefBadge />}
-            </div>
-            <h3>{c.t}</h3>
-            <p>{c.d}</p>
+  <!-- 3. Colecciones: lista tipográfica; en escritorio la foto sigue al cursor -->
+  <section class="cols" aria-labelledby="cols-titulo">
+    <header class="cols__head">
+      <h2 id="cols-titulo" class="kicker">Colecciones</h2>
+      <p class="cols__nota">Seis maneras de empezar. <em class="cols__hover">Pasa por encima para verlas.</em></p>
+    </header>
+    <ul class="cols__lista" data-cursor-list>
+      {colecciones.map((c, i) => (
+        <li class="cols__item">
+          <a href={c.h} class="cols__link">
+            <span class="cols__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="cols__nombre">{c.t}</span>
+            <span class="cols__meta">{c.d}<br /><span class="cols__n">{c.n}</span></span>
           </a>
-        ))}
+          <figure class="cols__foto">
+            <Image src={c.img} alt="" width={900} widths={[480, 900]} sizes="(hover: hover) 26vw, 100vw" class="cols__img" />
+            {c.ref && <RefBadge />}
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- 4. Sofás: galería horizontal anclada al scroll (móvil: carrusel nativo) -->
+  <section class="gal" aria-labelledby="gal-titulo" data-hscroll>
+    <div class="gal__pista" data-hscroll-track>
+      <div class="gal__intro">
+        <h2 id="gal-titulo" class="gal__titulo">El sofá alrededor del que <em>sucede todo</em></h2>
+        <p class="gal__texto">Una selección de los modelos que puedes probar en el showroom. Desliza para recorrerlos.</p>
+        <a href="/sofas" class="gal__todos">Ver los {totalSofas} sofás <span aria-hidden="true">→</span></a>
+      </div>
+      {galeria.map((p, i) => (
+        <a href={`/catalogo/${p.slug}`} class="gal__pieza">
+          <div class="gal__img">
+            <Image src={p.portada} alt={`Sofá ${p.nombre} de ${nombreMarca(p.marca)}`} width={1500} widths={[700, 1100, 1500]} sizes="(max-width: 900px) 86vw, 64vw" class="gal__foto" />
+          </div>
+          <div class="gal__pie">
+            <span class="gal__idx">{String(i + 1).padStart(2, '0')} / {String(galeria.length).padStart(2, '0')}</span>
+            <span class="gal__nombre">{p.nombre}</span>
+            <span class="gal__datos">{nombreMarca(p.marca)} · {p.tipos.join(', ')}</span>
+          </div>
+        </a>
+      ))}
+      <a href="/sofas" class="gal__fin">
+        <span class="gal__fin-num">{totalSofas}</span>
+        <span>modelos para elegir con calma <em>Ver todos →</em></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 5. Cómo trabajamos: recorrido alternado -->
+  <section class="pasos" aria-labelledby="pasos-titulo">
+    <h2 id="pasos-titulo" class="kicker kicker--claro">Cómo trabajamos <em>De la idea a tu salón, sin complicaciones</em></h2>
+    <ol class="pasos__lista">
+      {pasos.map(([t, d], i) => (
+        <li class:list={['pasos__paso', { 'pasos__paso--dcha': i % 2 === 1 }]}>
+          <span class="pasos__n">{String(i + 1).padStart(2, '0')}</span>
+          <p class="pasos__frase" data-lines>{t}</p>
+          <p class="pasos__desc">{d}</p>
+        </li>
+      ))}
+      <li class="pasos__apoyo" aria-hidden="true">
+        <Image src={foto('zenit/zenit-02')} alt="" width={800} widths={[480, 800]} sizes="(max-width: 900px) 60vw, 26vw" class="pasos__img" data-parallax="0.12" />
+      </li>
+    </ol>
+  </section>
+
+  <!-- 6. Interiorismo y reformas: foto a sangre + caja que entra con el scroll -->
+  <section class="inter" aria-labelledby="inter-titulo">
+    <div class="inter__media">
+      <Image src={mbInteriorismo} alt="Salón abierto con cocina y comedor integrados" width={1600} widths={[800, 1200, 1600]} sizes="100vw" class="inter__img" data-parallax="0.08" />
+      <RefBadge />
+    </div>
+    <div class="inter__caja" data-reveal-box>
+      <p class="kicker">Interiorismo y reformas</p>
+      <h2 id="inter-titulo" class="inter__titulo">Espacios con sentido. <em>Espacios con identidad.</em></h2>
+      <p>El interiorismo empieza escuchando: cómo vives, qué necesitas y qué quieres sentir en tu casa. A partir de ahí, mobiliario, materiales, distribución y luz trabajan juntos.</p>
+      <div class="inter__links">
+        <a href="/interiorismo">Interiorismo <span aria-hidden="true">→</span></a>
+        <a href="/reformas">Reformas <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
 
-  <!-- 5. Sofás destacados -->
-  <section class="section">
-    <div class="wrap">
-      <div class="head reveal">
-        <div>
-          <span class="eyebrow">En el showroom</span>
-          <h2>El sofá alrededor del que sucede todo.</h2>
+  <!-- 7. Materiales: macro del tejido, texto mínimo -->
+  <section class="mat" aria-labelledby="mat-titulo">
+    <Image src={foto('beatrice/beatrice-08')} alt="Primer plano de un tejido de sofá con su etiqueta" width={1800} widths={[800, 1300, 1800]} sizes="100vw" class="mat__img" data-zoom />
+    <div class="mat__txt">
+      <h2 id="mat-titulo" class="mat__titulo" data-lines>Materiales que marcan la diferencia</h2>
+      <p>Cada modelo admite distintos tejidos, colores y acabados. Ven a tocarlos.</p>
+      <a href={waLink('Hola UNIK, quiero información sobre tejidos y acabados.')} target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="home_materiales">Pregunta por WhatsApp <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <!-- 8. Marcas: banda en movimiento -->
+  <section class="marq" aria-labelledby="marq-titulo">
+    <h2 id="marq-titulo" class="kicker">Marcas en el showroom</h2>
+    <div class="marq__banda">
+      {[0, 1].map((copia) => (
+        <ul class="marq__fila" aria-hidden={copia === 1 ? 'true' : undefined}>
+          {marcasConFotos.map((m) => (
+            <li><a href={`/marcas/${m.slug}`} tabindex={copia === 1 ? -1 : undefined}>{m.nombre}</a><span class="marq__sep" aria-hidden="true">✳</span></li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </section>
+
+  <!-- 9. Visítanos -->
+  <section class="vis" id="contacto" aria-labelledby="vis-titulo">
+    <div class="vis__grid">
+      <div class="vis__datos">
+        <h2 id="vis-titulo" class="kicker">Visítanos</h2>
+        <p class="vis__dir">
+          <a href={site.mapsUrl} target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="home">{site.direccion.calle}</a>
+          <em>{site.direccion.ciudad}</em>
+        </p>
+        <dl class="vis__info">
+          {site.horario.map((h) => <div><dt>{h.dias}</dt><dd>{h.horas}</dd></div>)}
+          <div><dt>Teléfono</dt><dd><a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="home">{site.telefono}</a></dd></div>
+        </dl>
+        <div class="vis__links">
+          <a href={site.mapsUrl} target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="home">Cómo llegar <span aria-hidden="true">→</span></a>
+          <a href={waLink('Hola UNIK, me gustaría reservar una visita al showroom.')} target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="home_visitanos">Reservar por WhatsApp <span aria-hidden="true">→</span></a>
         </div>
-        <a href="/sofas" class="btn btn--ghost">Ver todos los sofás</a>
       </div>
-      <div class="grid grid-3">
-        {destacados.slice(0, 6).map((p) => <ProductCard p={p} />)}
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. Cómo trabajamos -->
-  <section class="section section--dark">
-    <div class="wrap">
-      <span class="eyebrow">Cómo trabajamos</span>
-      <h2 class="reveal">De la idea a tu salón, sin complicaciones.</h2>
-      <ol class="pasos grid grid-4">
-        {pasos.map(([n, t, d]) => (
-          <li class="reveal"><span class="pasos__n">{n}</span><h3>{t}</h3><p>{d}</p></li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
-  <!-- 7. Interiorismo y reformas -->
-  <section class="section">
-    <div class="wrap split">
-      <div class="split__img reveal">
-        <Image src={mbInteriorismo} alt="Salón abierto con cocina y comedor integrados" width={1000} widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
-        <RefBadge />
-      </div>
-      <div class="split__txt reveal">
-        <span class="eyebrow">Interiorismo y reformas</span>
-        <h2>Espacios con sentido. Espacios con identidad.</h2>
-        <p class="lead">El interiorismo empieza escuchando: cómo vives, qué necesitas y qué quieres sentir en tu casa. A partir de ahí, mobiliario, materiales, distribución y luz trabajan juntos.</p>
-        <div class="btns">
-          <a href="/interiorismo" class="btn">Interiorismo</a>
-          <a href="/reformas" class="btn btn--ghost">Reformas</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8. Materiales -->
-  <section class="section section--arena">
-    <div class="wrap split split--rev">
-      <div class="split__img reveal">
-        <Image src={foto('beatrice/beatrice-08')} alt="Detalle del tejido de un sofá" width={1000} widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
-      </div>
-      <div class="split__txt reveal">
-        <span class="eyebrow">Materiales y tejidos</span>
-        <h2>Materiales que marcan la diferencia.</h2>
-        <p class="lead">Cada modelo admite distintos tejidos, colores y acabados. En el showroom puedes ver y tocar los muestrarios y comparar con calma.</p>
-        <a href={waLink('Hola UNIK, quiero información sobre tejidos y acabados.')} class="btn btn--wa" target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="home_materiales">Pregunta por WhatsApp</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. Showroom + contacto -->
-  <section class="section" id="contacto">
-    <div class="wrap split">
-      <div class="split__txt reveal">
-        <span class="eyebrow">Visítanos</span>
-        <h2>Ven a descubrir UNIK en persona.</h2>
-        <p class="lead">Te esperamos en San Sebastián de los Reyes para conocer nuestras propuestas y conversar sobre tu espacio.</p>
-        <address>
-          <strong>{site.direccion.calle}</strong><br />
-          {site.direccion.cp} {site.direccion.ciudad} ({site.direccion.provincia})<br />
-          {site.horario.map((h) => <span>{h.dias}: {h.horas}<br /></span>)}
-          <a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="home">{site.telefono}</a>
-        </address>
-        <a href={site.mapsUrl} class="link" target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="home">Cómo llegar</a>
-      </div>
-      <div class="reveal">
-        <ContactForm titulo="Hablemos de tu próximo proyecto." />
+      <figure class="vis__foto">
+        <Image src={foto('paula/paula-01-velvety')} alt="Sofá Paula de Bobbio en un salón luminoso" width={1000} widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 40vw" class="vis__img" />
+        <figcaption>Fotos del showroom, próximamente</figcaption>
+      </figure>
+      <div class="vis__form">
+        <ContactForm titulo="Hablemos de tu próximo proyecto" />
       </div>
     </div>
   </section>
@@ -267,13 +287,6 @@ const pasos = [
     .hero :global(.hero__layer), .hero__logo, .hero .ln > *, .hero__scroll span { animation: none; }
   }
 
-  .trust { border-bottom: 1px solid var(--line); }
-  .trust__in { display: flex; align-items: center; gap: 32px; padding-block: 22px; overflow-x: auto; }
-  .trust__lbl { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--nogal); white-space: nowrap; }
-  .trust ul { display: flex; gap: clamp(20px, 3vw, 44px); list-style: none; margin: 0; padding: 0; }
-  .trust li { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; white-space: nowrap; color: var(--ink-soft); }
-  .trust li.pend { opacity: 0.45; }
-
   /* ---------- Intro ---------- */
   .intro { padding: clamp(96px, 14vw, 200px) 0 clamp(96px, 12vw, 180px); overflow: hidden; }
   .intro__grid {
@@ -305,28 +318,160 @@ const pasos = [
     .intro__cuerpo { grid-column: 1 / -1; grid-row: 4; margin-top: 40px; }
   }
 
-  .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 48px); }
-  .head h2 { margin: 0; max-width: 18ch; }
+  /* ---------- Piezas comunes ---------- */
+  .kicker { font-family: var(--font-text); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em; margin: 0; }
+  .kicker em { display: block; font-family: var(--font-display); font-size: 1.15rem; font-weight: 340; letter-spacing: 0; color: var(--terracota); }
+  .kicker--claro { color: var(--blanco-roto); }
 
-  .col { text-decoration: none; }
-  .col__img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: 16px; }
-  .col__img :global(img) { transition: transform 0.8s var(--ease); }
-  .col:hover .col__img :global(img) { transform: scale(1.04); }
-  .col h3 { margin-bottom: 4px; }
-  .col p { color: var(--ink-soft); font-size: 0.95rem; }
+  /* ---------- 3. Colecciones ---------- */
+  .cols { padding: clamp(80px, 10vw, 160px) var(--gutter); max-width: 1600px; margin: 0 auto; position: relative; }
+  .cols__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: clamp(24px, 4vw, 48px); }
+  .cols__nota { margin: 0; font-size: 0.85rem; color: var(--ink-soft); text-align: right; }
+  .cols__nota em { font-family: var(--font-display); font-size: 1.05rem; }
+  .cols__lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .cols__item { border-bottom: 1px solid var(--line); }
+  .cols__link {
+    display: grid; grid-template-columns: 3.5rem 1fr minmax(180px, 26ch); align-items: center; gap: 16px;
+    padding: clamp(10px, 1.6vw, 22px) 0; text-decoration: none; position: relative; z-index: 2;
+  }
+  .cols__num { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-soft); }
+  .cols__nombre {
+    font-family: var(--font-display); font-weight: 320; font-size: clamp(3rem, 9vw, 8.6rem);
+    line-height: 0.95; letter-spacing: -0.035em; transition: transform 0.6s var(--ease-out), color 0.4s;
+  }
+  .cols__meta { font-size: 0.85rem; color: var(--ink-soft); text-align: right; line-height: 1.4; }
+  .cols__n { color: var(--terracota); }
+  .cols__foto { margin: 0; position: relative; }
+  .cols :global(.cols__img) { width: 100%; height: 100%; object-fit: cover; }
 
-  .pasos { list-style: none; padding: 0; margin: 48px 0 0; }
-  .pasos li { border-top: 1px solid #2a3846; padding-top: 24px; }
-  .pasos__n { font-family: var(--font-display); font-weight: 900; font-size: 2.4rem; color: var(--piedra); display: block; margin-bottom: 12px; }
-  .pasos p { color: #c9c2b8; }
+  /* Escritorio con ratón: la foto flota y sigue al cursor */
+  @media (hover: hover) and (pointer: fine) and (min-width: 761px) {
+    .cols__lista:hover .cols__nombre { color: rgb(22 20 18 / 0.22); }
+    .cols__item:hover .cols__nombre { color: var(--tinta); transform: translateX(1.5vw); }
+    .cols__item:hover .cols__nombre { font-style: italic; }
+    .cols__foto {
+      position: fixed; left: 0; top: 0; z-index: 1; width: clamp(220px, 22vw, 380px); aspect-ratio: 4 / 5; overflow: hidden;
+      pointer-events: none; opacity: 0; transform: translate3d(var(--cx, 50vw), var(--cy, 50vh), 0) translate(-50%, -50%) scale(0.9);
+      transition: opacity 0.35s, transform 0.35s var(--ease-out);
+    }
+    .cols__item:hover .cols__foto { opacity: 1; transform: translate3d(var(--cx, 50vw), var(--cy, 50vh), 0) translate(-50%, -50%) scale(1); }
+  }
+  /* Táctil o pantalla estrecha: cada nombre con su foto debajo a ancho completo */
+  @media (hover: none), (pointer: coarse), (max-width: 760px) {
+    .cols__hover { display: none; }
+    .cols__link { grid-template-columns: 2.4rem 1fr; }
+    .cols__meta { grid-column: 2; text-align: left; }
+    .cols__foto { aspect-ratio: 4 / 3; overflow: hidden; margin-bottom: 20px; }
+  }
+  @media (max-width: 600px) { .cols__head { flex-direction: column; align-items: flex-start; } .cols__nota { text-align: left; } }
 
-  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
-  .split--rev .split__img { order: 2; }
-  .split__img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
-  address { font-style: normal; margin: 24px 0; line-height: 1.8; }
+  /* ---------- 4. Galería de sofás ---------- */
+  .gal { background: var(--arena); overflow: hidden; }
+  .gal__pista {
+    display: flex; gap: clamp(16px, 3vw, 56px); align-items: stretch;
+    padding: clamp(64px, 8vw, 120px) var(--gutter);
+    overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .gal__pista::-webkit-scrollbar { display: none; }
+  .gal__intro { flex: 0 0 min(82vw, 440px); display: flex; flex-direction: column; justify-content: flex-end; scroll-snap-align: start; }
+  .gal__titulo { font-weight: 320; font-size: clamp(2.4rem, 4.4vw, 4.6rem); letter-spacing: -0.03em; margin-bottom: 24px; }
+  .gal__titulo em { color: var(--terracota); }
+  .gal__texto { color: var(--ink-soft); max-width: 34ch; }
+  .gal__todos, .gal__fin em { font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--terracota); align-self: flex-start; padding-bottom: 2px; font-style: normal; }
+  .gal__pieza { flex: 0 0 min(86vw, 64vw); text-decoration: none; scroll-snap-align: center; display: flex; flex-direction: column; }
+  .gal__img { aspect-ratio: 16 / 10; overflow: hidden; background: var(--hueso); }
+  .gal :global(.gal__foto) { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-out); }
+  .gal__pieza:hover :global(.gal__foto) { transform: scale(1.03); }
+  .gal__pie { display: grid; grid-template-columns: auto 1fr; align-items: baseline; column-gap: 24px; padding-top: 16px; }
+  .gal__idx { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-soft); grid-row: span 2; align-self: start; padding-top: 1.2em; }
+  .gal__nombre { font-family: var(--font-display); font-weight: 320; font-size: clamp(2.6rem, 6vw, 6.4rem); line-height: 0.95; letter-spacing: -0.035em; }
+  .gal__datos { font-size: 0.85rem; color: var(--ink-soft); }
+  .gal__fin { flex: 0 0 min(70vw, 360px); display: flex; flex-direction: column; justify-content: center; gap: 12px; text-decoration: none; scroll-snap-align: end; }
+  .gal__fin-num { font-family: var(--font-display); font-weight: 300; font-size: clamp(5rem, 12vw, 11rem); line-height: 0.9; letter-spacing: -0.04em; color: var(--terracota); }
+  .gal__fin em { display: block; margin-top: 12px; }
+  /* Con JS en escritorio el scroll vertical mueve la pista (ver motion.ts) */
+  :global(.is-hscroll) .gal__pista { overflow: visible; scroll-snap-type: none; height: 100svh; align-items: center; padding-block: 0; width: max-content; }
+  :global(.is-hscroll) .gal__pieza { flex-basis: 64vw; }
+
+  /* ---------- 5. Cómo trabajamos ---------- */
+  .pasos { background: var(--tinta); color: var(--blanco-roto); padding: clamp(96px, 12vw, 200px) var(--gutter); }
+  .pasos .kicker em { color: #d79b7f; }
+  .pasos__lista {
+    list-style: none; margin: clamp(48px, 7vw, 112px) auto 0; padding: 0; max-width: 1400px;
+    display: grid; grid-template-columns: repeat(12, 1fr); row-gap: clamp(56px, 8vw, 128px); column-gap: 24px; position: relative;
+  }
+  .pasos__paso { grid-column: 1 / 9; display: grid; grid-template-columns: 3rem 1fr; column-gap: 16px; }
+  .pasos__paso--dcha { grid-column: 5 / 13; }
+  .pasos__n { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--piedra); padding-top: 1.1em; }
+  .pasos__frase { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(2.4rem, 5.6vw, 5.6rem); line-height: 1; letter-spacing: -0.03em; }
+  .pasos__desc { grid-column: 2; margin: 16px 0 0; color: #b9b2a8; max-width: 42ch; }
+  .pasos__apoyo { grid-column: 1 / 5; grid-row: 2 / 4; align-self: center; aspect-ratio: 3 / 4; overflow: hidden; }
+  .pasos :global(.pasos__img) { width: 100%; height: 120%; object-fit: cover; margin-top: -10%; }
   @media (max-width: 900px) {
-    .split { grid-template-columns: 1fr; }
-    .split--rev .split__img { order: 0; }
-    .split__img { aspect-ratio: 4 / 3; }
+    .pasos__paso, .pasos__paso--dcha { grid-column: 1 / -1; }
+    .pasos__paso--dcha { padding-left: 12%; }
+    .pasos__apoyo { grid-column: 6 / -1; grid-row: auto; order: 3; }
+  }
+
+  /* ---------- 6. Interiorismo y reformas ---------- */
+  .inter { position: relative; min-height: 110svh; display: flex; align-items: flex-end; justify-content: flex-end; overflow: hidden; padding: var(--gutter); }
+  .inter__media { position: absolute; inset: 0; overflow: hidden; }
+  .inter :global(.inter__img) { width: 100%; height: 116%; object-fit: cover; margin-top: -8%; }
+  .inter__caja { position: relative; background: var(--blanco-roto); padding: clamp(28px, 4vw, 56px); max-width: 560px; margin-bottom: 4svh; }
+  .inter__titulo { font-weight: 320; font-size: clamp(2rem, 3.4vw, 3.4rem); letter-spacing: -0.025em; margin: 12px 0 20px; }
+  .inter__titulo em { color: var(--terracota); }
+  .inter__caja p { color: var(--ink-soft); }
+  .inter__links { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 24px; }
+  .inter__links a { font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--terracota); padding-bottom: 2px; }
+  .inter__links a:hover, .gal__todos:hover, .vis__links a:hover, .mat__txt a:hover { color: var(--terracota); }
+  @media (max-width: 760px) { .inter { min-height: 0; padding: 52svh 0 0; } .inter__caja { margin: 0; max-width: none; } }
+
+  /* ---------- 7. Materiales ---------- */
+  .mat { position: relative; height: 92svh; min-height: 520px; overflow: hidden; color: var(--blanco-roto); display: flex; align-items: center; }
+  .mat :global(.mat__img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 40%; transform: scale(1.5); transform-origin: 30% 40%; }
+  .mat::after { content: ''; position: absolute; inset: 0; background: rgb(22 20 18 / 0.28); }
+  .mat__txt { position: relative; z-index: 1; padding: 0 var(--gutter); max-width: 1600px; margin: 0 auto; width: 100%; }
+  .mat__titulo { font-weight: 300; font-size: clamp(3rem, 8.4vw, 9rem); line-height: 0.95; letter-spacing: -0.04em; max-width: 11ch; margin-bottom: 28px; }
+  .mat__txt p { max-width: 32ch; margin-bottom: 12px; }
+  .mat__txt a { font-weight: 500; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+
+  /* ---------- 8. Marcas ---------- */
+  .marq { padding: clamp(64px, 8vw, 120px) 0; overflow: hidden; }
+  .marq .kicker { padding: 0 var(--gutter); margin-bottom: 24px; }
+  .marq__banda { display: flex; width: max-content; animation: marq 48s linear infinite; }
+  .marq:hover .marq__banda, .marq:focus-within .marq__banda { animation-play-state: paused; }
+  .marq__fila { display: flex; list-style: none; margin: 0; padding: 0; }
+  .marq__fila li { display: flex; align-items: center; white-space: nowrap; }
+  .marq__fila a { font-family: var(--font-display); font-weight: 300; font-size: clamp(3rem, 8vw, 8rem); letter-spacing: -0.035em; text-decoration: none; padding: 0 0.25em; transition: color 0.3s; }
+  .marq__fila a:hover { color: var(--terracota); font-style: italic; }
+  .marq__sep { color: var(--terracota); font-size: clamp(1.4rem, 3vw, 3rem); padding: 0 0.4em; }
+  @keyframes marq { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marq__banda { animation: none; width: auto; flex-wrap: wrap; padding: 0 var(--gutter); }
+    .marq__fila + .marq__fila { display: none; }
+    .marq__fila { flex-wrap: wrap; }
+  }
+
+  /* ---------- 9. Visítanos ---------- */
+  .vis { padding: clamp(80px, 10vw, 160px) var(--gutter); border-top: 1px solid var(--line); }
+  .vis__grid { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: clamp(56px, 7vw, 112px); max-width: 1600px; margin: 0 auto; }
+  .vis__datos { grid-column: 1 / 8; }
+  .vis__dir { margin: 20px 0 40px; font-family: var(--font-display); font-weight: 300; font-size: clamp(2.4rem, 5.4vw, 5.6rem); line-height: 1; letter-spacing: -0.035em; }
+  .vis__dir a { text-decoration: none; }
+  .vis__dir em { display: block; color: var(--terracota); }
+  .vis__info { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 12px 48px; margin: 0 0 32px; }
+  .vis__info dt { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+  .vis__info dd { margin: 4px 0 0; font-family: var(--font-display); font-size: 1.35rem; }
+  .vis__info a { text-decoration: none; }
+  .vis__links { display: flex; gap: 32px; flex-wrap: wrap; }
+  .vis__links a { font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--terracota); padding-bottom: 2px; }
+  .vis__foto { grid-column: 9 / 13; margin: 0; align-self: end; }
+  .vis :global(.vis__img) { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .vis__foto figcaption { margin-top: 10px; font-size: 0.72rem; color: var(--ink-soft); }
+  .vis__form { grid-column: 4 / 10; }
+  @media (max-width: 900px) {
+    .vis__datos, .vis__foto, .vis__form { grid-column: 1 / -1; }
+    .vis__foto { grid-column: 4 / -1; }
+    .vis__info { grid-template-columns: 1fr 1fr; }
   }
 </style>

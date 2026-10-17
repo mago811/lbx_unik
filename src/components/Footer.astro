@@ -2,54 +2,65 @@
 import Logo from './LogoWordmark.svg';
 import { site, waLink } from '../data/site';
 ---
-<footer class="ftr section--dark">
-  <div class="wrap ftr__grid">
-    <div>
-      <div class="ftr__logo"><Logo /></div>
-      <p class="ftr__tag">Sofás · Mobiliario · Interiorismo · Reformas</p>
-      <p class="ftr__claim">Diseño que se vive. Espacios que permanecen.</p>
-    </div>
-    <div>
-      <p class="eyebrow">Showroom</p>
-      <p>{site.direccion.calle}<br />{site.direccion.cp} {site.direccion.ciudad}<br />{site.direccion.provincia}</p>
-      <a class="link" href={site.mapsUrl} target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="footer">Cómo llegar</a>
-    </div>
-    <div>
-      <p class="eyebrow">Horario</p>
-      {site.horario.map((h) => <p>{h.dias}<br /><span class="muted">{h.horas}</span></p>)}
-    </div>
-    <div>
-      <p class="eyebrow">Contacto</p>
-      <p>
-        <a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="footer">{site.telefono}</a><br />
-        <a href={waLink('Hola UNIK, me gustaría hacer una consulta.')} target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="footer">WhatsApp</a><br />
-        <a href={`mailto:${site.email}`}>{site.email}</a><br />
-        <a href={site.instagram} target="_blank" rel="noopener">Instagram</a>
-      </p>
+<footer class="ftr">
+  <div class="ftr__top">
+    <p class="ftr__claim">Diseño que se vive. <em>Espacios que permanecen.</em></p>
+    <div class="ftr__cols">
+      <div>
+        <p class="ftr__lbl">Showroom</p>
+        <p>{site.direccion.calle}<br />{site.direccion.cp} {site.direccion.ciudad}<br />{site.direccion.provincia}</p>
+        <a href={site.mapsUrl} target="_blank" rel="noopener" data-track="clic_como_llegar" data-ubicacion="footer">Cómo llegar →</a>
+      </div>
+      <div>
+        <p class="ftr__lbl">Horario</p>
+        {site.horario.map((h) => <p>{h.dias}<br /><span class="muted">{h.horas}</span></p>)}
+      </div>
+      <div>
+        <p class="ftr__lbl">Contacto</p>
+        <p>
+          <a href={site.telefonoHref} data-track="clic_telefono" data-ubicacion="footer">{site.telefono}</a><br />
+          <a href={waLink('Hola UNIK, me gustaría hacer una consulta.')} target="_blank" rel="noopener" data-track="clic_whatsapp" data-ubicacion="footer">WhatsApp</a><br />
+          <a href={`mailto:${site.email}`}>{site.email}</a><br />
+          <a href={site.instagram} target="_blank" rel="noopener">Instagram</a>
+        </p>
+      </div>
+      <div>
+        <p class="ftr__lbl">Explorar</p>
+        <p>
+          <a href="/sofas">Sofás</a><br /><a href="/mobiliario">Mobiliario</a><br /><a href="/salones">Salones</a><br />
+          <a href="/interiorismo">Interiorismo</a><br /><a href="/marcas">Marcas</a>
+        </p>
+      </div>
     </div>
   </div>
-  <div class="wrap ftr__bottom">
-    <span>© {new Date().getFullYear()} {site.razonSocial}</span>
+  <div class="ftr__marca" aria-hidden="true"><Logo /></div>
+  <div class="ftr__bottom">
+    <span>© {new Date().getFullYear()} {site.razonSocial} · {site.tagline}</span>
     <nav aria-label="Legal">
       <a href="/legal/aviso-legal">Aviso legal</a>
       <a href="/legal/privacidad">Privacidad</a>
       <a href="/legal/cookies">Cookies</a>
+      <button type="button" class="ftr__cookies" data-abrir-cookies>Configurar cookies</button>
     </nav>
   </div>
 </footer>
 
 <style>
-  .ftr { padding: clamp(64px, 8vw, 104px) 0 32px; }
-  .ftr__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
-  .ftr__logo { color: var(--marfil); }
-  .ftr__logo :global(svg) { height: 48px; width: auto; }
-  .ftr__tag { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; margin: 8px 0 28px; }
-  .ftr__claim { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; max-width: 16ch; line-height: 1.2; }
+  .ftr { background: var(--tinta); color: var(--blanco-roto); padding: clamp(72px, 9vw, 140px) var(--gutter) 28px; overflow: hidden; }
+  .ftr__top { display: grid; grid-template-columns: 1fr 1.6fr; gap: clamp(40px, 6vw, 96px); max-width: 1600px; margin: 0 auto; }
+  .ftr__claim { margin: 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(2rem, 3.4vw, 3.4rem); line-height: 1.02; letter-spacing: -0.03em; max-width: 12ch; }
+  .ftr__claim em { color: #d79b7f; }
+  .ftr__cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; font-size: 0.92rem; line-height: 1.7; }
+  .ftr__lbl { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8f877d; margin-bottom: 10px; }
   .ftr a { text-decoration: none; }
-  .ftr a:hover { color: var(--piedra); }
+  .ftr a:hover { color: #d79b7f; }
   .muted { color: #a9a39b; }
-  .ftr__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 64px; padding-top: 24px; border-top: 1px solid #2a3846; font-size: 0.8rem; color: #a9a39b; }
-  .ftr__bottom nav { display: flex; gap: 24px; }
-  @media (max-width: 900px) { .ftr__grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 560px) { .ftr__grid { grid-template-columns: 1fr; } .ftr { padding-bottom: 96px; } }
+  .ftr__marca { margin: clamp(56px, 8vw, 120px) auto 0; max-width: 1600px; color: var(--blanco-roto); }
+  .ftr__marca :global(svg) { width: 100%; height: auto; display: block; }
+  .ftr__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; max-width: 1600px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid #2c2925; font-size: 0.78rem; color: #a9a39b; }
+  .ftr__bottom nav { display: flex; gap: 24px; flex-wrap: wrap; }
+  .ftr__cookies { background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+  .ftr__cookies:hover { color: #d79b7f; }
+  @media (max-width: 1000px) { .ftr__top { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .ftr__cols { grid-template-columns: 1fr 1fr; } .ftr { padding-bottom: 96px; } }
 </style>
