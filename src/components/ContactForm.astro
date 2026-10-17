@@ -22,6 +22,7 @@ const tipos = ['Visita al showroom', 'Sofás', 'Mobiliario', 'Interiorismo', 'Re
   </div>
   <label>Mensaje<textarea name="mensaje" rows="4" placeholder="Medidas del espacio, estilo que te gusta, cuándo te vendría bien venir…"></textarea></label>
   <label class="cf__check"><input type="checkbox" name="privacidad" required /> Acepto la <a href="/legal/privacidad">política de privacidad</a>.</label>
+  <p class="cf__rgpd">Responsable: UNIK Interior Design SL. Finalidad: atender tu consulta o visita. Puedes acceder, rectificar y suprimir tus datos, entre otros derechos. Más información en la <a href="/legal/privacidad">política de privacidad</a>.</p>
   <input type="text" name="empresa" class="cf__hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
   <button class="btn" type="submit">Enviar consulta</button>
   <p class="cf__ok" hidden>Gracias, hemos recibido tu consulta. Te contestamos lo antes posible.</p>
@@ -85,6 +86,7 @@ const tipos = ['Visita al showroom', 'Sofás', 'Mobiliario', 'Interiorismo', 'Re
   .cf__check { display: flex !important; align-items: center; gap: 10px !important; text-transform: none !important; letter-spacing: 0 !important; font-size: 0.9rem !important; font-weight: 400 !important; color: var(--ink) !important; }
   .cf__check input { width: 18px; height: 18px; accent-color: var(--tinta); }
   .cf__hp { position: absolute; left: -9999px; }
+  .cf__rgpd { margin: -10px 0 0; font-size: 0.75rem; line-height: 1.5; color: var(--ink-soft); max-width: 70ch; }
   .cf__ok { color: #4f6b3e; margin: 0; }
   .cf__err { color: #a3352b; margin: 0; }
   .cf .btn { justify-self: start; padding: 1.05em 1.8em; }
