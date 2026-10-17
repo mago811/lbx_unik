@@ -39,14 +39,14 @@ const pasos = [
   <!-- 1. Hero: foto a sangre, wordmark gigante detrás del sofá recortado -->
   <section class="hero" aria-labelledby="hero-titulo">
     <div class="hero__media" aria-hidden="true">
-      <Image src={heroFondo} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" class="hero__layer hero__bg" loading="eager" fetchpriority="high" />
+      <Image src={heroFondo} alt="" width={1600} widths={[640, 1024, 1600, 2400]} sizes="100vw" class="hero__layer hero__bg" loading="eager" fetchpriority="high" />
     </div>
     <h1 id="hero-titulo" class="hero__marca">
       <span class="sr-only">UNIK Sofás, San Sebastián de los Reyes. Espacios para vivir. Diseño para sentir.</span>
       <span class="hero__logo" aria-hidden="true"><Logo /></span>
     </h1>
     <div class="hero__media hero__media--front" aria-hidden="true">
-      <Image src={heroRecorte} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" class="hero__layer hero__cut" loading="eager" />
+      <Image src={heroRecorte} alt="" width={1600} widths={[640, 1024, 1600, 2400]} sizes="100vw" class="hero__layer hero__cut" loading="eager" />
     </div>
 
     <div class="hero__pie">
@@ -83,7 +83,7 @@ const pasos = [
       </div>
       <figure class="intro__foto">
         <div class="intro__marco">
-          <Image src={foto('cotton/cotton-07')} alt="Mano ajustando la funda de lino de un sofá Cotton" widths={[480, 800, 1200]} sizes="(max-width: 760px) 92vw, 34vw" class="intro__img" data-parallax="0.1" />
+          <Image src={foto('cotton/cotton-07')} alt="Mano ajustando la funda de lino de un sofá Cotton" width={1200} widths={[480, 800, 1200]} sizes="(max-width: 760px) 92vw, 34vw" class="intro__img" data-parallax="0.1" />
         </div>
         <figcaption>Funda desenfundable · Cotton, Bobbio</figcaption>
       </figure>
@@ -104,7 +104,7 @@ const pasos = [
         {colecciones.map((c) => (
           <a href={c.h} class="col reveal">
             <div class="col__img">
-              <Image src={c.img} alt={c.t} widths={[480, 800]} sizes="(max-width: 600px) 100vw, 33vw" class="cover" />
+              <Image src={c.img} alt={c.t} width={800} widths={[480, 800]} sizes="(max-width: 600px) 100vw, 33vw" class="cover" />
               {c.ref && <RefBadge />}
             </div>
             <h3>{c.t}</h3>
@@ -148,7 +148,7 @@ const pasos = [
   <section class="section">
     <div class="wrap split">
       <div class="split__img reveal">
-        <Image src={mbInteriorismo} alt="Salón abierto con cocina y comedor integrados" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
+        <Image src={mbInteriorismo} alt="Salón abierto con cocina y comedor integrados" width={1000} widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
         <RefBadge />
       </div>
       <div class="split__txt reveal">
@@ -167,7 +167,7 @@ const pasos = [
   <section class="section section--arena">
     <div class="wrap split split--rev">
       <div class="split__img reveal">
-        <Image src={foto('beatrice/beatrice-08')} alt="Detalle del tejido de un sofá" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
+        <Image src={foto('beatrice/beatrice-08')} alt="Detalle del tejido de un sofá" width={1000} widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="cover" />
       </div>
       <div class="split__txt reveal">
         <span class="eyebrow">Materiales y tejidos</span>

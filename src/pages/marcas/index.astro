@@ -16,7 +16,7 @@ import { porMarca } from '../../data/productos';
           return (
             <a href={ps.length ? `/marcas/${m.slug}` : undefined} class:list={['mk__c', { off: !ps.length }]}>
               <div class="mk__img">
-                {ps.length ? <Image src={ps[0].portada} alt={m.nombre} widths={[480, 800]} sizes="33vw" class="cover" /> : <span>Fotos pendientes</span>}
+                {ps.length ? <Image src={ps[0].portada} alt={m.nombre} width={800} widths={[480, 800]} sizes="33vw" class="cover" /> : <span>Fotos pendientes</span>}
               </div>
               <h2>{m.nombre}</h2>
               <p>{m.foco}{ps.length ? ` · ${ps.length} modelos` : ''}</p>

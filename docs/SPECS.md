@@ -70,9 +70,9 @@ Requisitos: Node 22+.
 | Ruta | Plantilla | Estado contenido |
 |---|---|---|
 | `/` | `index.astro` | ✅ Listo para validar |
-| `/sofas` | `ColeccionPage` | ✅ 32 modelos (Bobbio + Afosxsofas) |
+| `/sofas` | `ColeccionPage` | ✅ Bobbio, Pedro Ortiz y Afosxsofas |
 | `/salones` | `ColeccionPage` | ✅ Reutiliza referencias por etiqueta |
-| `/mobiliario` | `ColeccionPage` | ⚠️ Faltan mesas/sillas/aparadores |
+| `/mobiliario` | `ColeccionPage` | ✅ Mesas, sillas, aparadores (Oslo, Rodri, Modesto Navarro) y butacas |
 | `/dormitorios` | `ColeccionPage` | ⚠️ Falta Guardia (dormitorio) |
 | `/cocinas` | `ColeccionPage` | ⛔ Servicio sin confirmar |
 | `/exterior` | `ColeccionPage` | ⛔ Servicio sin confirmar |

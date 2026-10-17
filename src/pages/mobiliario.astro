@@ -1,7 +1,10 @@
 ---
 import ColeccionPage from '../components/ColeccionPage.astro';
-import { porColeccion } from '../data/productos';
-import hero from '../../assets/moodboard/02-comedor-mobiliario.jpg';
+import { porColeccion, foto } from '../data/productos';
+
+// Primero las piezas de mobiliario (mesas, aparadores, sillas) y después butacas y sofás auxiliares
+const esButaca = (t: string[]) => t.includes('Butaca') || t.includes('Pufs y auxiliares');
+const lista = porColeccion('mobiliario').sort((a, b) => Number(esButaca(a.tipos)) - Number(esButaca(b.tipos)));
 ---
 <ColeccionPage
   seoTitle="Mobiliario y muebles en San Sebastián de los Reyes · UNIK"
@@ -9,10 +12,8 @@ import hero from '../../assets/moodboard/02-comedor-mobiliario.jpg';
   eyebrow="Mobiliario"
   titulo="Piezas que definen un espacio."
   texto="La personalidad de una casa se construye con piezas bien elegidas. Mesas, sillas, muebles auxiliares y soluciones de almacenaje que aportan equilibrio, calidez y sentido a cada estancia. Descubre referencias que conviven con naturalidad y hacen que cada rincón tenga su propia identidad."
-  hero={hero}
-  heroRef
-  productos={porColeccion('mobiliario')}
-  pendiente="Faltan las fotos de mesas, sillas y aparadores (Rodri Diseño, Modesto Navarro, Oslo). De momento se muestran butacas y auxiliares."
+  hero={foto('sc002-costera-jun-023-mesa-pie-ovalado')}
+  productos={lista}
   ctaPrincipal="Consultar una pieza"
   tipoConsulta="Mobiliario"
 />

@@ -15,7 +15,7 @@
 | 8b | ¿Bobbio es una marca de Pedro Ortiz? (sus fotos vienen en carpetas de Pedro Ortiz) | Mostrarlas como uno o dos fabricantes | Fase 1 |
 | 9 | Qué modelos tienen **expuestos** en tienda | Sello "Ven a verlo" | Fase 2 |
 | 10 | ¿Mostrar "precio desde"? | Fichas | Decisión |
-| 11 | ~~Fotos de Rodri Diseño, Oslo, Pedro Ortiz~~ ✅ Recibidas en el Drive (falta sumarlas al catálogo, ver LBX 7b) | Mobiliario y sofás | — |
+| 11 | ~~Fotos de Rodri Diseño, Oslo, Pedro Ortiz~~ ✅ Recibidas y en el catálogo | Mobiliario y sofás | — |
 | 12 | 2+ proyectos reales con permiso | Página Proyectos | Fase 2 |
 | 13 | Equipo / historia / años en Sanse | Nosotros | Fase 1 |
 | 14 | Acceso a Google Business Profile e Instagram | Reseñas, feed, enlaces | Fase 1 |
@@ -34,7 +34,7 @@
 | 5 | `/api/contacto` con Resend + honeypot | ✅ Hecho |
 | 6 | Revisar el logo vectorizado (se generó automáticamente desde PNG; idealmente pedir el original al diseñador) | ⚠️ |
 | 7 | Descargar del Drive y optimizar las fotos de los 7 proveedores (1.309 fotos, ver `content/proveedores/INVENTARIO.md`) | ✅ Hecho |
-| 7b | Sumar al catálogo Pedro Ortiz, Oslo, Rodri Diseño, Modesto Navarro y los nuevos Sira y Zenit de Bobbio | ⏳ |
+| 7b | Sumar al catálogo Pedro Ortiz, Oslo, Rodri Diseño, Modesto Navarro y los nuevos Sira y Zenit de Bobbio (68 fichas) | ✅ Hecho |
 | 8 | CMS (Decap) para que el cliente edite el catálogo | Fase 2 |
 
 ## Checklist antes de publicar

@@ -43,7 +43,7 @@ const tipos = tiposDe(lista);
         {p.pendiente && <p class="ph__pend">⚠ {p.pendiente}</p>}
       </div>
       <div class="ph__img">
-        <Image src={p.hero} alt={p.titulo} widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 55vw" class="cover" loading="eager" />
+        <Image src={p.hero} alt={p.titulo} width={1400} widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 55vw" class="cover" loading="eager" />
         {p.heroRef && <RefBadge />}
       </div>
     </div>

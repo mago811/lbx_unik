@@ -14,6 +14,8 @@ const marca = marcas.find((m) => m.slug === p.marca)!;
 const relacionados = productos.filter((x) => x.slug !== p.slug && x.tipos.some((t) => p.tipos.includes(t))).slice(0, 3);
 const ref = `${p.nombre} (${marca.nombre})`;
 const coleccion = p.colecciones[0];
+const tapizado = p.colecciones.includes('sofas') || p.tipos.includes('Silla');
+const tipoConsulta = p.colecciones.includes('sofas') ? 'Sofás' : 'Mobiliario';
 ---
 <Base
   title={`${p.nombre} de ${marca.nombre} · ${p.tipos[0]} · UNIK San Sebastián de los Reyes`}
@@ -24,13 +26,13 @@ const coleccion = p.colecciones[0];
   <section class="wrap ficha">
     <div class="gal">
       <div class="gal__main">
-        <Image src={p.fotos[0]} alt={`${p.nombre} de ${marca.nombre}`} widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 60vw" class="cover" loading="eager" id="gal-main" />
+        <Image src={p.fotos[0]} alt={`${p.nombre} de ${marca.nombre}`} width={1100} widths={[640, 1100]} sizes="(max-width: 900px) 100vw, 60vw" quality={75} class="cover" loading="eager" id="gal-main" />
       </div>
       {p.fotos.length > 1 && (
         <div class="gal__thumbs">
           {p.fotos.slice(0, 12).map((f, i) => (
             <button class:list={['gal__t', { on: i === 0 }]} aria-label={`Ver foto ${i + 1}`}>
-              <Image src={f} alt="" widths={[200, 1400]} sizes="120px" class="cover" />
+              <Image src={f} alt="" width={240} widths={[240, 1100]} sizes="120px" quality={75} class="cover" />
             </button>
           ))}
         </div>
@@ -43,7 +45,9 @@ const coleccion = p.colecciones[0];
       <p class="lead">{p.resumen}</p>
       <dl>
         <dt>Medidas</dt><dd>Varias composiciones. Consúltanos.</dd>
-        <dt>Tapizados</dt><dd>Amplio muestrario de tejidos y colores en tienda.</dd>
+        {tapizado
+          ? <><dt>Tapizados</dt><dd>Amplio muestrario de tejidos y colores en tienda.</dd></>
+          : <><dt>Acabados</dt><dd>Varios materiales y acabados. Consúltanos.</dd></>}
         <dt>Dónde verlo</dt><dd>Showroom UNIK · {site.direccion.ciudad}</dd>
       </dl>
       <div class="btns info__btns">
@@ -65,7 +69,7 @@ const coleccion = p.colecciones[0];
 
   <section class="section section--arena" id="consulta">
     <div class="wrap" style="max-width:820px">
-      <ContactForm referencia={ref} tipo="Sofás" titulo={`Consultar ${p.nombre}`} />
+      <ContactForm referencia={ref} tipo={tipoConsulta} titulo={`Consultar ${p.nombre}`} />
     </div>
   </section>
 </Base>

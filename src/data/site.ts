@@ -31,11 +31,12 @@ export const waLink = (texto: string) =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(texto)}`;
 
 export const marcas = [
+  // confirmada = hay fotos del proveedor en el catálogo. Falta su autorización de uso (ver docs/PENDIENTES.md)
   { slug: 'bobbio', nombre: 'Bobbio', foco: 'Sofás y butacas', confirmada: true },
+  { slug: 'pedro-ortiz', nombre: 'Pedro Ortiz', foco: 'Sofás y sillones relax', confirmada: true },
   { slug: 'afosxsofas', nombre: 'Afosxsofas', foco: 'Sofás, relax y sofás cama', confirmada: true },
-  { slug: 'pedro-ortiz', nombre: 'Pedro Ortiz', foco: 'Sofás', confirmada: false },
+  { slug: 'rodri-diseno', nombre: 'Rodri Diseño', foco: 'Mesas, sillas y muebles de salón', confirmada: true },
+  { slug: 'oslo', nombre: 'Oslo', foco: 'Mesas, aparadores y composiciones', confirmada: true },
+  { slug: 'modesto-navarro', nombre: 'Modesto Navarro', foco: 'Sillas', confirmada: true },
   { slug: 'guardia', nombre: 'Guardia', foco: 'Salón y dormitorio', confirmada: false },
-  { slug: 'rodri-diseno', nombre: 'Rodri Diseño', foco: 'Mesas, sillas y muebles', confirmada: false },
-  { slug: 'modesto-navarro', nombre: 'Modesto Navarro', foco: 'Sillas', confirmada: false },
-  { slug: 'oslo', nombre: 'Oslo', foco: 'Mesas y composiciones', confirmada: false },
 ];
