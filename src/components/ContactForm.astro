@@ -29,6 +29,7 @@ const tipos = ['Visita al showroom', 'Sofás', 'Mobiliario', 'Interiorismo', 'Re
 </form>
 
 <script>
+  import { track } from '../scripts/analitica';
   document.querySelectorAll<HTMLFormElement>('[data-form="contacto"]').forEach((f) =>
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -53,8 +54,7 @@ const tipos = ['Visita al showroom', 'Sofás', 'Mobiliario', 'Interiorismo', 'Re
         });
         const r = await res.json().catch(() => ({}));
         if (!res.ok || !r.ok) throw new Error(r.error || 'No hemos podido enviar tu consulta.');
-        const w = window as any;
-        (w.dataLayer ||= []).push({ event: 'envio_formulario', tipo: datos.tipo, ubicacion: location.pathname });
+        track('envio_formulario', { tipo: datos.tipo, ubicacion: location.pathname });
         f.reset();
         ok.hidden = false;
         btn.textContent = 'Enviado';

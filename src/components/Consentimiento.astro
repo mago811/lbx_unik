@@ -1,0 +1,99 @@
+---
+// Banner de cookies. Solo aparece si hay algún ID de medición configurado
+// (PUBLIC_GA4_ID / PUBLIC_META_PIXEL_ID). Sin IDs, la web no usa cookies de terceros.
+const ga4 = import.meta.env.PUBLIC_GA4_ID || '';
+const pixel = import.meta.env.PUBLIC_META_PIXEL_ID || '';
+---
+<script is:inline define:vars={{ ga4, pixel }}>
+  window.__UNIK_IDS = { ga4: ga4 || undefined, pixel: pixel || undefined };
+</script>
+
+<div class="ck" id="cookies" role="dialog" aria-modal="false" aria-labelledby="ck-titulo" hidden>
+  <div class="ck__in">
+    <div class="ck__txt">
+      <p id="ck-titulo" class="ck__titulo">Cookies, con tu permiso</p>
+      <p>Usamos cookies propias necesarias para que la web funcione y, si lo aceptas, cookies de analítica (Google Analytics) y de marketing (Meta) para medir visitas y mejorar nuestros anuncios. <a href="/legal/cookies">Política de cookies</a>.</p>
+    </div>
+    <form class="ck__opts" hidden>
+      <label><input type="checkbox" checked disabled /> <span><strong>Necesarias</strong> Siempre activas</span></label>
+      <label><input type="checkbox" name="analitica" /> <span><strong>Analítica</strong> Google Analytics</span></label>
+      <label><input type="checkbox" name="marketing" /> <span><strong>Marketing</strong> Meta Pixel</span></label>
+    </form>
+    <div class="ck__btns">
+      <button type="button" data-ck="rechazar">Rechazar</button>
+      <button type="button" data-ck="configurar">Configurar</button>
+      <button type="button" data-ck="guardar" hidden>Guardar selección</button>
+      <button type="button" data-ck="aceptar">Aceptar todo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { hayMedicion, leer, guardar, aplicar } from '../scripts/analitica';
+
+  const ck = document.getElementById('cookies')!;
+  const opts = ck.querySelector<HTMLFormElement>('.ck__opts')!;
+  const btn = (k: string) => ck.querySelector<HTMLButtonElement>(`[data-ck="${k}"]`)!;
+  const campo = (n: string) => opts.elements.namedItem(n) as HTMLInputElement;
+
+  const abrir = (config = false) => {
+    const c = leer();
+    campo('analitica').checked = c?.analitica ?? false;
+    campo('marketing').checked = c?.marketing ?? false;
+    opts.hidden = !config;
+    btn('configurar').hidden = config;
+    btn('guardar').hidden = !config;
+    ck.hidden = false;
+  };
+  const cerrar = (analitica: boolean, marketing: boolean) => {
+    ck.hidden = true;
+    guardar({ analitica, marketing });
+  };
+
+  if (hayMedicion()) {
+    const c = leer();
+    if (c) aplicar(c);
+    else abrir();
+  }
+
+  btn('aceptar').addEventListener('click', () => cerrar(true, true));
+  btn('rechazar').addEventListener('click', () => cerrar(false, false));
+  btn('configurar').addEventListener('click', () => abrir(true));
+  btn('guardar').addEventListener('click', () => cerrar(campo('analitica').checked, campo('marketing').checked));
+  document.querySelectorAll('[data-abrir-cookies]').forEach((b) =>
+    b.addEventListener('click', () => (hayMedicion() ? abrir(true) : location.assign('/legal/cookies'))),
+  );
+</script>
+
+<style>
+  .ck { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 80; display: flex; justify-content: center; pointer-events: none; }
+  .ck__in {
+    pointer-events: auto; width: min(100%, 980px); background: var(--blanco-roto); color: var(--tinta);
+    border: 1px solid var(--line); box-shadow: 0 20px 60px rgb(22 20 18 / 0.18);
+    padding: clamp(20px, 3vw, 32px); display: grid; grid-template-columns: 1fr auto; gap: 16px 32px; align-items: end;
+  }
+  .ck__titulo { font-family: var(--font-display); font-weight: 340; font-size: 1.6rem; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .ck__txt p:not(.ck__titulo) { margin: 0; font-size: 0.9rem; color: var(--ink-soft); max-width: 62ch; }
+  .ck__txt a { color: var(--tinta); }
+  .ck__opts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 12px 32px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .ck__opts[hidden] { display: none; }
+  .ck__opts label { display: flex; gap: 10px; align-items: flex-start; font-size: 0.85rem; }
+  .ck__opts input { width: 18px; height: 18px; accent-color: var(--tinta); margin-top: 2px; }
+  .ck__opts strong { display: block; font-weight: 500; }
+  .ck__opts span { color: var(--ink-soft); }
+  .ck__btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  /* Aceptar y Rechazar con el mismo peso visual */
+  .ck__btns button {
+    font: 500 0.8rem var(--font-text); letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+    padding: 0.95em 1.3em; border: 1px solid var(--tinta); background: var(--tinta); color: var(--blanco-roto);
+  }
+  .ck__btns [data-ck='configurar'] { background: transparent; color: var(--tinta); }
+  .ck__btns button:hover { background: var(--terracota); border-color: var(--terracota); color: var(--blanco-roto); }
+  .ck__btns button[hidden] { display: none; }
+  @media (max-width: 760px) {
+    .ck { left: 8px; right: 8px; bottom: calc(60px + env(safe-area-inset-bottom)); }
+    .ck__in { grid-template-columns: 1fr; }
+    .ck__btns { justify-content: stretch; }
+    .ck__btns button { flex: 1 1 40%; }
+  }
+</style>

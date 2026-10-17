@@ -18,8 +18,12 @@ revisar y dar por terminada cada pieza de la web.
 | `cta_reserva_visita` | Botón "Reserva tu visita" | Micro-conversión |
 | `cta_consulta` | Botones que llevan al formulario | Micro-conversión |
 
-Todos los elementos llevan `data-track="<evento>"` y `data-ubicacion="<dónde>"`. El layout
-los empuja a `window.dataLayer`. En producción, Google Tag Manager los envía a GA4 y Meta Pixel.
+Todos los elementos llevan `data-track="<evento>"` y `data-ubicacion="<dónde>"`. `track()` (`src/scripts/analitica.ts`)
+los envía a `window.dataLayer`, a GA4 (`gtag`) y a Meta Pixel (`Contact`, `Lead`, `Schedule`), estos dos solo si hay consentimiento.
+
+**Cookies:** `src/components/Consentimiento.astro`. Nada de terceros se carga sin consentimiento previo. Rechazar tiene el mismo peso que aceptar,
+hay configuración por categoría (analítica / marketing), el consentimiento dura 12 meses y se puede cambiar desde el footer
+(«Configurar cookies»). Al retirarlo se borran las cookies `_ga*` / `_fb*`. Sin `PUBLIC_GA4_ID` ni `PUBLIC_META_PIXEL_ID` no aparece el banner.
 
 ---
 
@@ -34,7 +38,7 @@ los empuja a `window.dataLayer`. En producción, Google Tag Manager los envía a
 | Hosting | **Vercel** (equipo LOBOX-Dev, proyecto `lbx-unik`) | Adaptador `@astrojs/vercel`: todo estático salvo `/api/*` |
 | Formularios | Vercel Function `/api/contacto` + Resend | Ver §6 |
 | CMS | Fase 2: **Decap CMS** (git-based) o Sanity | El cliente edita fichas sin tocar código |
-| Analítica | GTM + GA4 + Meta Pixel, tras consentimiento | Banner de cookies obligatorio |
+| Analítica | GA4 + Meta Pixel directos (sin GTM), tras consentimiento | Banner propio, ver §1 |
 
 Requisitos: Node 22+.
 
@@ -218,7 +222,7 @@ había una tarifa PVP; se excluyó a propósito).
 | Preview | Vercel (proyecto `lbx-unik`) | ✅ Creado |
 | Producción | Vercel + dominio del cliente | ⏳ Falta dominio |
 
-Variables de entorno: `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` (ver §6). Futuras: `TURNSTILE_SECRET`, `PUBLIC_GTM_ID`.
+Variables de entorno: `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` (ver §6), `PUBLIC_GA4_ID`, `PUBLIC_META_PIXEL_ID` (ver §1). Futura: `TURNSTILE_SECRET`.
 
 ---
 
